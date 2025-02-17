@@ -8,13 +8,13 @@
    - "New Game".
    - "Continue" (if there is a save).
    - "Survival".
-   - "Shop".
+   - "Skull Shop".
 2. the player should always be able to return to the main menu.
 3. Selecting a game mode ("New Game", "Continue", "Survival").Each mode must be independent of the other modes.
 
-### Shop
-4. When going to "Shop", the system should display an array of all skills that are not yet open to the player.
-5. The player should be able to buy new skills with skulls.
+### Skull Shop
+4. When going to "Skull Shop", the system should display an array of all skills that are not yet open to the player.
+5. The player should be able to buy (unlock) new skills with skulls.
 6. Once purchased, the skill should become available for use in the shopping phase.
 
 ### Levels
@@ -153,12 +153,12 @@
   4. The system starts a new game, loading the first level and moving to the battle stage.
 - Result: The game has started and the player is in the first level battle stage.
 
-### Scenario 2: Buying a new skill from the shop
+### Scenario 2: Buying a new skill from the Skull Shop
 - Actor: Player.
-- Goal: Buy a new skill with skulls.
+- Goal: Buy (unlock) a new skill with skulls.
 - Steps:
   1. The player is in the main menu.
-  2. The player selects "Shop".
+  2. The player selects "Skull Shop".
   3. The system displays an array of all skills not open to the player.
   4. The player selects a skill to purchase.
   5. The system checks if the player has enough skulls.
