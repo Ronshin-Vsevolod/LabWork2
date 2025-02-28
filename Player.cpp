@@ -2,7 +2,11 @@
 #include <iostream>
 
 Player::Player(PlayerData* playerData)
-    : Personage("Player", 100, 10, 0, true), playerData(playerData), swapCooldown(4), swapCooldownTimer(0) {}
+    : Personage("Player", 100, 10, 0, true), playerData(playerData), swapCooldown(4), swapCooldownTimer(0)
+{
+    skills.push_back(SkillRegistry["Fireball"]);
+    skills.push_back(SkillRegistry["Ice Blast"]);
+}
 
 void Player::swapWithEnemy(std::vector<Personage*>& enemies)
 {
@@ -12,7 +16,7 @@ void Player::swapWithEnemy(std::vector<Personage*>& enemies)
         return;
     }
 
-    for (auto& enemy : enemies)
+    for (Personage* enemy : enemies)
     {
         if (enemy && enemy->location == location + (direction ? 1 : -1))
         {
@@ -34,12 +38,39 @@ void Player::updateCooldowns()
         swapCooldownTimer--;
     }
 
-    for (auto& skill : skills)
+    for (std::shared_ptr<Skill>& skill : skills)
     {
         if (!skill->preparing && skill->cooldownTimer > 0)
         {
             skill->cooldownTimer--;
         }
+    }
+}
+
+void Player::swapPreparedSkills(int index1, int index2)
+{
+    if (index1 >= 0 && index1 < prepareStack.size() && index2 >= 0 && index2 < prepareStack.size())
+    {
+        std::swap(prepareStack[index1], prepareStack[index2]);
+        std::cout << "Навыки " << prepareStack[index1]->name << " и " << prepareStack[index2]->name << " поменяны местами.\n";
+    }
+    else
+    {
+        std::cout << "Неверные индексы для обмена навыков.\n";
+    }
+}
+
+void Player::removePreparedSkill(int index)
+{
+    if (index >= 0 && index < prepareStack.size())
+    {
+        std::cout << "Навык " << prepareStack[index]->name << " убран из стэка готовности.\n";
+        prepareStack[index]->cooldownTimer = 0;
+        prepareStack.erase(prepareStack.begin() + index);
+    }
+    else
+    {
+        std::cout << "Неверный индекс для удаления навыка.\n";
     }
 }
 

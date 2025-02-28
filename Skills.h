@@ -1,53 +1,40 @@
 #ifndef SKILLS_H
 #define SKILLS_H
 
-#include "Skill.h"
-#include <unordered_map>
+#include <string>
+#include <vector>
 #include <memory>
+#include <unordered_map>
 
-class Fireball : public Skill
+class Personage;
+
+class Skill
 {
 public:
-    Fireball() : Skill("Fireball", 5) {}
-    void applyEffect(Personage* user, const std::vector<Personage*>& targets) override
-    {
-        
-    }
-};
+    Skill(const std::string& name, int cooldown);
+    virtual ~Skill() = default;
 
-class IceBlast : public Skill
-{
-public:
-    IceBlast() : Skill("Ice Blast", 3) {}
-    void applyEffect(Personage* user, const std::vector<Personage*>& targets) override
-    {
-
-    }
-};
-
-struct SkillInfo
-{
-    std::shared_ptr<Skill> skill;
-    int skullCost;
+    std::string name;
+    int cooldown;
+    int cooldownTimer;
+    bool preparing;
     int coinCost;
+    int skullCost;
+
+    virtual void applyEffect(Personage* user, const std::vector<Personage*>& targets) = 0;
 };
 
-std::unordered_map<std::string, SkillInfo> SkillRegistry =
+class ClassicSkill : public Skill
 {
-    {"Fireball", {std::make_shared<Fireball>(), 10, 20}},
-    {"Ice Blast", {std::make_shared<IceBlast>(), 15, 30}},
+public:
+    ClassicSkill(const std::string& name, int cooldown, int damage, const std::vector<int>& range_zones);
+
+    int damage;
+    std::vector<int> range_zones;
+
+    void applyEffect(Personage* user, const std::vector<Personage*>& targets) override;
 };
 
-bool upgradeSkill(std::shared_ptr<Skill> skill, int& coins)
-{
-    auto it = SkillRegistry.find(skill->name);
-    if (it != SkillRegistry.end() && coins >= it->second.coinCost)
-    {
-        coins -= it->second.coinCost;
-        skill->damage += 5;
-        return true;
-    }
-    return false;
-}
+extern std::unordered_map<std::string, std::shared_ptr<Skill>> SkillRegistry;
 
 #endif

@@ -7,12 +7,13 @@
 class BattleState : public GameState
 {
 public:
-    BattleState(class GameManager* gameManager);
+    BattleState(GameManager* gameManager);
     void enter() override;
     void exit() override;
     void handleInput(const std::string& inputData) override;
 
 private:
+    void handlePlayerTurn(const std::string& inputData);
     void placePlayerInCenter();
     void handleEnemyTurns();
     void checkEnemies();

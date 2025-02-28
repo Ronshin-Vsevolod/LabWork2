@@ -1,7 +1,9 @@
 #include "PurchaseState.h"
 
 PurchaseState::PurchaseState(GameManager* gameManager)
-    : gameManager(gameManager), player(gameManager->getPlayer()) {}
+    : gameManager(gameManager), player(gameManager->getPlayer())
+{
+}
 
 void PurchaseState::enter()
 {
@@ -45,9 +47,9 @@ void PurchaseState::handleInput(const std::string& inputData)
 void PurchaseState::upgradeSkill()
 {
     std::cout << "Выберите навык для улучшения:\n";
-    for (const auto& skill : player->playerData->skills)
+    for (const std::shared_ptr<Skill>& skill : player->playerData->skills)
     {
-        auto it = SkillRegistry.find(skill->name);
+        std::unordered_map<std::string, SkillInfo>::iterator it = SkillRegistry.find(skill->name);
         if (it != SkillRegistry.end())
         {
             std::cout << skill->name << " - " << it->second.coinCost << " монет\n";
@@ -57,14 +59,21 @@ void PurchaseState::upgradeSkill()
     std::string skillName;
     std::cin >> skillName;
 
-    auto it = SkillRegistry.find(skillName);
-    if (it != SkillRegistry.end() && upgradeSkill(it->second.skill, player->playerData->money))
+    std::unordered_map<std::string, SkillInfo>::iterator it = SkillRegistry.find(skillName);
+    if (it != SkillRegistry.end())
     {
-        std::cout << "Навык " << skillName << " улучшен!\n";
+        if (upgradeSkill(it->second.skill, player->playerData->money))
+        {
+            std::cout << "Навык " << skillName << " улучшен!\n";
+        }
+        else
+        {
+            std::cout << "Не удалось улучшить навык.\n";
+        }
     }
     else
     {
-        std::cout << "Не удалось улучшить навык.\n";
+        std::cout << "Неизвестный навык.\n";
     }
 }
 
@@ -94,4 +103,17 @@ void PurchaseState::increaseMaxHP()
     {
         std::cout << "Недостаточно денег для увеличения максимума HP.\n";
     }
+}
+
+bool PurchaseState::upgradeSkill(std::shared_ptr<Skill> skill, int& money)
+{
+    auto it = SkillRegistry.find(skill->name);
+    if (it != SkillRegistry.end() && money >= it->second.coinCost)
+    {
+        money -= it->second.coinCost;
+        skill->damage += 1;
+        std::cout << "Навык " << skill->name << " улучшен! Новый урон: " << skill->damage << "\n";
+        return true;
+    }
+    return false;
 }

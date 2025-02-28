@@ -10,7 +10,7 @@ A = ar
 
 AFLAGS = rsv
 
-CСXFLAGS = -I. -std=c++17 -Werror -Wpedantic -Wall -g -fPIC
+CXXFLAGS = -I. -std=c++17 -Werror -Wpedantic -Wall -g -fPIC
 
 LDXXFLAGS = $(CCXFLAGS) -L. -l:$(LIBPROJECT)
 
@@ -18,7 +18,7 @@ LDGTESTFLAGS = $(LDXXFLAGS) -lgtest -lgtest_main -lpthread
 
 DEPS=$(wildcard *.h)
 
-OBJ=Main.o
+OBJ=Main.o BattleState.o Enemy.o EnemyAI.o GameManager.o LevelData.o LevelManager.o LoadGameState.o MainMenuState.o Personage.o Player.o PlayerData.o PurchaseState.o Skills.o SkullShopState.o
 
 TEST-OBJ=GoogleTest.o
 

@@ -1,6 +1,9 @@
 #include "PlayerData.h"
 
-PlayerData::PlayerData() : money(0), skulls(0), health(100), maxHP(100) {}
+PlayerData::PlayerData()
+    : money(0), skulls(0), health(100), maxHP(100)
+{
+}
 
 void PlayerData::resetOnDeath()
 {

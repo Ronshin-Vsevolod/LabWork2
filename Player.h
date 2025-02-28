@@ -10,6 +10,8 @@ public:
     Player(PlayerData* playerData);
     void swapWithEnemy(std::vector<Personage*>& enemies);
     void updateCooldowns();
+    void swapPreparedSkills(int index1, int index2);
+    void removePreparedSkill(int index);
 
     void resetOnDeath();
 

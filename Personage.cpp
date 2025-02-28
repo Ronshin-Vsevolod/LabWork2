@@ -3,7 +3,9 @@
 #include <algorithm>
 
 Personage::Personage(const std::string& name, int health, int damage, int location, bool direction)
-    : name(name), health(health), damage(damage), location(location), direction(direction) {}
+    : name(name), health(health), damage(damage), location(location), direction(direction)
+{
+}
 
 void Personage::prepareSkill(int skillIndex)
 {
@@ -11,20 +13,20 @@ void Personage::prepareSkill(int skillIndex)
     {
         skills[skillIndex]->preparing = true;
         prepareStack.push_back(skills[skillIndex]);
-        std::cout << "Навык " << skills[skillIndex]->name << " подготовлен.\n";
+        std::cout << name << " подготовил навык: " << skills[skillIndex]->name << "\n";
     }
     else
     {
-        std::cout << "Не удалось подготовить навык.\n";
+        std::cout << name << " не удалось подготовить навык.\n";
     }
 }
 
 void Personage::useSkills(int fieldSize, const std::vector<Personage*>& targets)
 {
-    for (auto skill : prepareStack)
+    for (std::shared_ptr<Skill> skill : prepareStack)
     {
         skill->preparing = false;
-        std::cout << "Использование навыка: " << skill->name << "\n";
+        std::cout << name << " использует навык: " << skill->name << "\n";
         skill->applyEffect(this, targets);
         checkAllCharacters(targets);
     }
@@ -67,7 +69,7 @@ void Personage::turnAround()
 
 bool Personage::isLocationOccupied(int location, const std::vector<Personage*>& enemies)
 {
-    for (auto enemy : enemies)
+    for (Personage* enemy : enemies)
     {
         if (enemy->location == location)
         {
@@ -79,7 +81,7 @@ bool Personage::isLocationOccupied(int location, const std::vector<Personage*>& 
 
 void Personage::checkAllCharacters(std::vector<Personage*>& enemies)
 {
-    auto it = std::remove_if(enemies.begin(), enemies.end(), [](Personage* enemy)
+    std::vector<Personage*>::iterator it = std::remove_if(enemies.begin(), enemies.end(), [](Personage* enemy)
     {
         return enemy->health <= 0;
     });

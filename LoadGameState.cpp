@@ -2,7 +2,9 @@
 #include <iostream>
 
 LoadGameState::LoadGameState(GameManager* gameManager)
-    : gameManager(gameManager) {}
+    : gameManager(gameManager)
+{
+}
 
 void LoadGameState::enter()
 {
@@ -19,4 +21,6 @@ void LoadGameState::exit()
     std::cout << "Выход из состояния загрузки.\n";
 }
 
-void LoadGameState::handleInput(const std::string& inputData){}
+void LoadGameState::handleInput(const std::string& inputData)
+{
+}

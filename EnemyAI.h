@@ -1,8 +1,12 @@
 #ifndef ENEMY_AI_H
 #define ENEMY_AI_H
 
-#include "Enemy.h"
+#include <vector>
+#include <memory>
 #include "Player.h"
+#include "Skills.h"
+
+class Enemy;
 
 class EnemyAI
 {

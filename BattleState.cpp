@@ -1,6 +1,7 @@
 #include "BattleState.h"
 #include "GameManager.h"
 #include "LevelManager.h"
+#include "MainMenuState.h"
 #include <iostream>
 
 BattleState::BattleState(GameManager* gameManager)
@@ -15,6 +16,39 @@ void BattleState::enter()
     std::cout << "Текущий уровень: " << levelManager->getLevelData()->levelNumber << "\n";
     placePlayerInCenter();
     isPlayerTurn = true;
+
+    while (true)
+    {
+        if (isPlayerTurn)
+        {
+            std::cout << "Ход игрока.\n";
+            std::string inputData;
+            std::cin >> inputData;
+            handlePlayerTurn(inputData);
+            isPlayerTurn = false;
+        }
+        
+        else
+        {
+            std::cout << "Ход противников.\n";
+            handleEnemyTurns();
+            isPlayerTurn = true;
+        }
+
+        if (gameManager->getPlayer()->health <= 0)
+        {
+            std::cout << "Игрок погиб!\n";
+            gameManager->getPlayer()->resetOnDeath();
+            break;
+        }
+        
+        if (levelManager->areAllEnemiesDefeated())
+        {
+            std::cout << "Все противники повержены!\n";
+            gameManager->completeCurrentLevel();
+            break;
+        }
+    }
 }
 
 void BattleState::exit()
@@ -24,46 +58,86 @@ void BattleState::exit()
 
 void BattleState::handleInput(const std::string& inputData)
 {
-    if (isPlayerTurn)
+    handlePlayerTurn(inputData);
+}
+
+void BattleState::handlePlayerTurn(const std::string& inputData) {
+    Player* player = gameManager->getPlayer();
+    bool turnEnded = false;
+    std::string input = inputData;
+
+    while (!turnEnded)
     {
-        if (inputData == "attack")
+        if (input == "attack")
         {
-            std::cout << "Использование навыка.\n";
-            gameManager->getPlayer()->useSkills(levelManager->getLevelData()->fieldSize, levelManager->getEnemies());
+            std::vector<Personage*> enemies;
+            for (const auto& enemy : levelManager->getEnemies())
+            {
+                enemies.push_back(enemy.get());
+            }
+
+            if (!player->skills.empty())
+            {
+                player->skills[0]->applyEffect(player, enemies);
+            }
+            turnEnded = true;
         }
-        else if (inputData == "move_right")
+        else if (input == "move_right")
         {
-            gameManager->getPlayer()->moveRight(levelManager->getLevelData()->fieldSize, levelManager->getEnemies());
+            turnEnded = true;
         }
-        else if (inputData == "move_left")
+        else if (input == "move_left")
         {
-            gameManager->getPlayer()->moveLeft(levelManager->getLevelData()->fieldSize, levelManager->getEnemies());
+            turnEnded = true;
         }
         else if (inputData == "turn_around")
         {
-            gameManager->getPlayer()->turnAround();
+            player->turnAround();
+            turnEnded = true;
         }
         else if (inputData == "prepare_skill")
         {
             int skillIndex;
             std::cout << "Введите индекс навыка: ";
             std::cin >> skillIndex;
-            gameManager->getPlayer()->prepareSkill(skillIndex);
+            player->prepareSkill(skillIndex);
+            turnEnded = true;
         }
-        else if (inputData == "swap")
+        else if (inputData == "swap_skills")
         {
-            gameManager->getPlayer()->swapWithEnemy(levelManager->getEnemies());
+            int index1, index2;
+            std::cout << "Введите индексы навыков для обмена: ";
+            std::cin >> index1 >> index2;
+            player->swapPreparedSkills(index1, index2);
+        }
+        else if (inputData == "remove_skill")
+        {
+            int index;
+            std::cout << "Введите индекс навыка для удаления: ";
+            std::cin >> index;
+            player->removePreparedSkill(index);
         }
         else if (inputData == "back")
         {
             std::cout << "Возврат в главное меню.\n";
             gameManager->changeState(new MainMenuState(gameManager));
+            turnEnded = true;
+        }
+        else
+        {
+            std::cout << "Неизвестная команда.\n";
         }
 
-        gameManager->getPlayer()->updateCooldowns();
+        if (!turnEnded)
+        {
+            std::cout << "Введите следующую команду: ";
+            std::cin >> input;
+        }
+    }
 
-        isPlayerTurn = false;
-        handleEnemyTurns();
+    if (turnEnded)
+    {
+        player->updateCooldowns();
     }
 }
 
@@ -76,7 +150,7 @@ void BattleState::handleEnemyTurns()
 {
     levelManager->removeDeadEnemies();
 
-    for (auto enemy : levelManager->getEnemies())
+    for (std::shared_ptr<Enemy> enemy : levelManager->getEnemies())
     {
         if (enemy)
         {
@@ -84,7 +158,6 @@ void BattleState::handleEnemyTurns()
         }
     }
 
-    isPlayerTurn = true;
     currentTurn++;
     levelManager->spawnEnemies(currentTurn, gameManager->getPlayer());
 }
