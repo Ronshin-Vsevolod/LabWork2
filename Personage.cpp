@@ -7,7 +7,7 @@ Personage::Personage(const std::string& name, int health, int damage, int locati
 {
 }
 
-void Personage::prepareSkill(int skillIndex)
+void Personage::prepareSkill(size_t skillIndex)
 {
     if (skillIndex >= 0 && skillIndex < skills.size())
     {
@@ -21,7 +21,7 @@ void Personage::prepareSkill(int skillIndex)
     }
 }
 
-void Personage::useSkills(int fieldSize, const std::vector<Personage*>& targets)
+void Personage::useSkills(int fieldSize, std::vector<Personage*>& targets)
 {
     for (std::shared_ptr<Skill> skill : prepareStack)
     {

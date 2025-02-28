@@ -1,4 +1,5 @@
 #include "SkullShopState.h"
+#include "MainMenuState.h"
 
 SkullShopState::SkullShopState(GameManager* gameManager)
     : gameManager(gameManager), player(gameManager->getPlayer())
@@ -9,11 +10,12 @@ void SkullShopState::enter()
 {
     std::cout << "Вход в магазин черепов.\n";
     std::cout << "Доступные навыки:\n";
-    for (const std::pair<std::string, SkillInfo>& entry : SkillRegistry)
+    for (const std::pair<const std::string, std::shared_ptr<Skill>>& entry : SkillRegistry)
     {
-        std::cout << entry.first << " - " << entry.second.skullCost << " черепов\n";
+        std::cout << entry.first << " - " << entry.second->skullCost << " черепов\n";
     }
-    std::cout << "Введите название навыка для покупки или 'back' для возврата.\n";
+    
+    handleInput("");
 }
 
 void SkullShopState::exit()
@@ -23,14 +25,19 @@ void SkullShopState::exit()
 
 void SkullShopState::handleInput(const std::string& inputData)
 {
-    if (inputData == "back")
+    while (true)
     {
-        std::cout << "Возврат в главное меню.\n";
-        gameManager->changeState(new MainMenuState(gameManager));
-    }
-    else
-    {
-        auto it = SkillRegistry.find(inputData);
+        std::string inputData;
+        std::cin >> inputData;
+
+        if (inputData == "back")
+        {
+            std::cout << "Возврат в главное меню.\n";
+            gameManager->changeState(new MainMenuState(gameManager));
+            break;
+        }
+
+        std::unordered_map<std::string, std::shared_ptr<Skill>>::iterator it = SkillRegistry.find(inputData);
         if (it != SkillRegistry.end())
         {
             if (player->playerData->skulls >= it->second->skullCost)
@@ -41,7 +48,7 @@ void SkullShopState::handleInput(const std::string& inputData)
             }
             else
             {
-                std::cout << "Недостаточно черепов.\n";
+                std::cout << "Недостаточно черепов. У вас " << player->playerData->skulls << " черепов, а нужно " << it->second->skullCost << ".\n";
             }
         }
         else

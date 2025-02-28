@@ -47,9 +47,9 @@ void Player::updateCooldowns()
     }
 }
 
-void Player::swapPreparedSkills(int index1, int index2)
+void Player::swapPreparedSkills(size_t index1, size_t index2)
 {
-    if (index1 >= 0 && index1 < prepareStack.size() && index2 >= 0 && index2 < prepareStack.size())
+    if (index1 < prepareStack.size() && index2 < prepareStack.size())
     {
         std::swap(prepareStack[index1], prepareStack[index2]);
         std::cout << "Навыки " << prepareStack[index1]->name << " и " << prepareStack[index2]->name << " поменяны местами.\n";
@@ -60,9 +60,9 @@ void Player::swapPreparedSkills(int index1, int index2)
     }
 }
 
-void Player::removePreparedSkill(int index)
+void Player::removePreparedSkill(size_t index)
 {
-    if (index >= 0 && index < prepareStack.size())
+    if (index < prepareStack.size())
     {
         std::cout << "Навык " << prepareStack[index]->name << " убран из стэка готовности.\n";
         prepareStack[index]->cooldownTimer = 0;
@@ -72,11 +72,4 @@ void Player::removePreparedSkill(int index)
     {
         std::cout << "Неверный индекс для удаления навыка.\n";
     }
-}
-
-void Player::resetOnDeath()
-{
-    health = 100;
-    maxHP = 100;
-    std::cout << "Игрок погиб. Параметры сброшены.\n";
 }

@@ -2,17 +2,22 @@
 #include "MainMenuState.h"
 #include "SkullShopState.h"
 #include "PurchaseState.h"
+#include "LevelData.h"
 
 GameManager::GameManager()
+    : currentState(nullptr), currentLevelIndex(0)
 {
-    player = new Player(new PlayerData());
-    levelManager = new LevelManager();
-    currentState = new MainMenuState(this);
-}
+    playerData = new PlayerData();
+    player = new Player(playerData);
 
-void GameManager::startGame()
-{
-    currentState->enter();
+    if (!Levels.empty())
+    {
+        levelManager = new LevelManager(&Levels[currentLevelIndex]);
+    }
+    else
+    {
+        levelManager = new LevelManager(nullptr);
+    }
 }
 
 void GameManager::changeState(GameState* newState)
@@ -39,13 +44,33 @@ void GameManager::loadGame()
 
 void GameManager::completeCurrentLevel()
 {
-    // Завершение уровня (заглушка)
-    std::cout << "Уровень завершён.\n";
+    std::cout << "Уровень " << Levels[currentLevelIndex].levelNumber << " завершён!\n";
+
+    player->playerData->skulls += Levels[currentLevelIndex].rewardSkulls;
+    std::cout << "Получено черепов: " << Levels[currentLevelIndex].rewardSkulls << "\n";
+    std::cout << "Текущее количество черепов: " << player->playerData->skulls << "\n";
+
+    currentLevelIndex++;
+    if (currentLevelIndex < Levels.size())
+    {
+        levelManager = new LevelManager(&Levels[currentLevelIndex]);
+        std::cout << "Начинается уровень " << Levels[currentLevelIndex].levelNumber << "!\n";
+    }
+    else
+    {
+        std::cout << "Поздравляем! Вы прошли все уровни!\n";
+        changeState(new MainMenuState(this));
+    }
 }
 
 LevelData* GameManager::getCurrentLevelData()
 {
     return levelManager->getLevelData();
+}
+
+GameState* GameManager::getCurrentState() const
+{
+    return currentState;
 }
 
 void GameManager::openSkullShop()

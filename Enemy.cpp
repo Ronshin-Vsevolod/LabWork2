@@ -1,9 +1,14 @@
 #include "Enemy.h"
 #include <iostream>
 
-Enemy::Enemy(const std::string& name, int health, int damage, int location, bool direction, EnemyAI* ai)
-    : Personage(name, health, damage, location, direction), path(0), ai(ai)
+Enemy::Enemy(const std::string& name, int health, int damage, int location, bool direction, std::unique_ptr<EnemyAI> ai)
+    : Personage(name, health, damage, location, direction), ai(std::move(ai))
 {
+}
+
+void Enemy::setAI(std::unique_ptr<EnemyAI> ai)
+{
+    this->ai = std::move(ai);
 }
 
 void Enemy::makeTurn()
@@ -36,8 +41,8 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& enemyType, i
     throw std::invalid_argument("Неизвестный тип противника: " + enemyType);
 }
 
-Goblin::Goblin(int location, bool direction, EnemyAI* ai)
-    : Enemy("Goblin", 30, 5, location, direction, ai)
+Goblin::Goblin(int location, bool direction, std::unique_ptr<EnemyAI> ai)
+    : Enemy("Goblin", 30, 5, location, direction, std::move(ai))
 {
     std::unordered_map<std::string, std::shared_ptr<Skill>>::iterator fireballIt = SkillRegistry.find("Fireball");
     if (fireballIt != SkillRegistry.end())
@@ -46,8 +51,8 @@ Goblin::Goblin(int location, bool direction, EnemyAI* ai)
     }
 }
 
-Orc::Orc(int location, bool direction, EnemyAI* ai)
-    : Enemy("Orc", 50, 10, location, direction, ai)
+Orc::Orc(int location, bool direction, std::unique_ptr<EnemyAI> ai)
+    : Enemy("Orc", 50, 10, location, direction, std::move(ai))
 {
     std::unordered_map<std::string, std::shared_ptr<Skill>>::iterator iceBlastIt = SkillRegistry.find("Ice Blast");
     if (iceBlastIt != SkillRegistry.end())

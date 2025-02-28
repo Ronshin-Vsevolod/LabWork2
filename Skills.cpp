@@ -41,6 +41,12 @@ void ClassicSkill::applyEffect(Personage* user, const std::vector<Personage*>& t
     cooldownTimer = cooldown;
 }
 
+void ClassicSkill::upgrade()
+{
+    damage += 1;
+    std::cout << "Навык " << name << " улучшен! Новый урон: " << damage << "\n";
+}
+
 std::unordered_map<std::string, std::shared_ptr<Skill>> SkillRegistry =
 {
     {

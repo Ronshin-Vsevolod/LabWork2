@@ -12,10 +12,11 @@ class EnemyAI
 {
 public:
     EnemyAI(Player* player, int fieldSize);
+    virtual ~EnemyAI() = default;
+    
+    virtual void makeTurn(Enemy* enemy);
 
-    void makeTurn(Enemy* enemy);
-
-private:
+protected:
     Player* player;
     int fieldSize;
 

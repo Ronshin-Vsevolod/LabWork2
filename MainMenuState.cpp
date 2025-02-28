@@ -1,4 +1,6 @@
 #include "MainMenuState.h"
+#include "BattleState.h"
+#include "LoadGameState.h"
 #include <iostream>
 
 MainMenuState::MainMenuState(GameManager* gameManager, bool hasSave)
@@ -11,6 +13,7 @@ void MainMenuState::enter()
     std::cout << "Вход в главное меню.\n";
     if (hasSave)
     {
+        std::cout << "0. Выход\n";
         std::cout << "1. Новая игра\n";
         std::cout << "2. Продолжить\n";
         std::cout << "3. Магазин черепов\n";
@@ -18,9 +21,24 @@ void MainMenuState::enter()
     }
     else
     {
+        std::cout << "0. Выход\n";
         std::cout << "1. Новая игра\n";
         std::cout << "3. Магазин черепов\n";
         std::cout << "4. Этап покупок\n";
+    }
+
+    std::string inputData;
+
+    while (true)
+    {
+        std::cin >> inputData;
+
+        handleInput(inputData);
+
+        if (inputData == "0")
+        {
+            break;
+        }
     }
 }
 
@@ -31,7 +49,12 @@ void MainMenuState::exit()
 
 void MainMenuState::handleInput(const std::string& inputData)
 {
-    if (inputData == "1")
+    if (inputData == "0")
+    {
+        std::cout << "Выход из игры.\n";
+        return;
+    }
+    else if (inputData == "1")
     {
         std::cout << "Начало новой игры.\n";
         gameManager->changeState(new BattleState(gameManager));

@@ -3,6 +3,7 @@
 
 #include "Personage.h"
 #include "EnemyAI.h"
+#include <memory>
 #include <unordered_map>
 #include <functional>
 #include <string>
@@ -12,14 +13,23 @@ class EnemyAI;
 class Enemy : public Personage
 {
 public:
-    Enemy(const std::string& name, int health, int damage, int location, bool direction, EnemyAI* ai = nullptr);
+    Enemy(const std::string& name, int health, int damage, int location, bool direction, std::unique_ptr<EnemyAI> ai = nullptr);
     virtual ~Enemy() = default;
+    
+    int path = 0;
+    
+    void setAI(std::unique_ptr<EnemyAI> ai);
+    void makeTurn();
 
-    int path;
-    EnemyAI* ai;
+    EnemyAI* getAI() const
+    {
+        return ai.get();
+    }
 
-    virtual void makeTurn();
+protected:
+    std::unique_ptr<EnemyAI> ai;
 };
+
 
 class EnemyFactory
 {
@@ -35,13 +45,14 @@ private:
 class Goblin : public Enemy
 {
 public:
-    Goblin(int location, bool direction, EnemyAI* ai = nullptr);
+    Goblin(int location, bool direction, std::unique_ptr<EnemyAI> ai = nullptr);
+    friend class EnemyAI;
 };
 
 class Orc : public Enemy
 {
 public:
-    Orc(int location, bool direction, EnemyAI* ai = nullptr);
+    Orc(int location, bool direction, std::unique_ptr<EnemyAI> ai = nullptr);
+    friend class EnemyAI;
 };
-
 #endif

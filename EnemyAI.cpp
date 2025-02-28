@@ -1,4 +1,5 @@
 #include "EnemyAI.h"
+#include "Enemy.h"
 #include <algorithm>
 #include <iostream>
 
@@ -42,7 +43,7 @@ void EnemyAI::handlePathZero(Enemy* enemy)
     }
 
     std::vector<std::shared_ptr<Skill>> availableSkills;
-    for (const auto& skill : enemy->skills)
+    for (const std::shared_ptr<Skill>& skill : enemy->skills)
     {
         if (!skill->preparing)
         {
@@ -96,7 +97,7 @@ void EnemyAI::handlePathZero(Enemy* enemy)
 void EnemyAI::handlePositivePath(Enemy* enemy)
 {
     int skillIndex = enemy->path - 1;
-    if (skillIndex >= 0 && skillIndex < enemy->skills.size())
+    if (skillIndex >= 0 && static_cast<size_t>(skillIndex) < enemy->skills.size())
     {
         enemy->prepareSkill(skillIndex);
     }
@@ -105,7 +106,7 @@ void EnemyAI::handlePositivePath(Enemy* enemy)
 
 void EnemyAI::handleUseSkills(Enemy* enemy)
 {
-    for (auto skill : enemy->prepareStack)
+    for (std::shared_ptr<Skill>& skill : enemy->prepareStack)
     {
         skill->applyEffect(enemy, {player});
         if (skill->cooldownTimer == 0)
@@ -137,9 +138,9 @@ void EnemyAI::handleMoveLeft(Enemy* enemy)
 
 bool EnemyAI::isPlayerInSkillRange(Enemy* enemy, const std::vector<std::shared_ptr<Skill>>& skills)
 {
-    for (auto skill : skills)
+    for (const std::shared_ptr<Skill>& skill : skills)
     {
-        if (abs(enemy->location - player->location) <= skill->range_zones.back())
+        if (std::shared_ptr<ClassicSkill> classicSkill = std::dynamic_pointer_cast<ClassicSkill>(skill))
         {
             return true;
         }
@@ -149,9 +150,9 @@ bool EnemyAI::isPlayerInSkillRange(Enemy* enemy, const std::vector<std::shared_p
 
 int EnemyAI::chooseSkillToPrepare(Enemy* enemy, const std::vector<std::shared_ptr<Skill>>& availableSkills)
 {
-    for (int i = 0; i < availableSkills.size(); ++i)
+    for (size_t i = 0; i < availableSkills.size(); ++i)
     {
-        if (abs(enemy->location - player->location) <= availableSkills[i]->range_zones.back())
+        if (std::shared_ptr<ClassicSkill> classicSkill = std::dynamic_pointer_cast<ClassicSkill>(availableSkills[i]))
         {
             return i;
         }

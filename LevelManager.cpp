@@ -1,5 +1,4 @@
 #include "LevelManager.h"
-#include "EnemyFactory.h"
 
 LevelManager::LevelManager(LevelData* levelData)
     : currentLevel(levelData)
@@ -18,10 +17,19 @@ void LevelManager::placePlayer(Personage* player)
 
 void LevelManager::removeDeadEnemies()
 {
-    enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](std::shared_ptr<Enemy> enemy)
-    {
-        return enemy->health <= 0;
-    }), enemies.end());
+    enemies.erase
+    (
+        std::remove_if
+        (
+            enemies.begin(),
+            enemies.end(),
+            [](const std::shared_ptr<Enemy>& enemy)
+            {
+                return enemy->health <= 0;
+            }
+        ),
+        enemies.end()
+    );
 }
 
 std::vector<std::shared_ptr<Enemy>> LevelManager::getEnemies()

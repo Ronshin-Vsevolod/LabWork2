@@ -20,8 +20,8 @@ public:
     std::vector<std::shared_ptr<Skill>> skills;
     std::vector<std::shared_ptr<Skill>> prepareStack;
 
-    virtual void prepareSkill(int skillIndex);
-    virtual void useSkills(int fieldSize, const std::vector<Personage*>& enemies);
+    virtual void prepareSkill(size_t skillIndex);
+    virtual void useSkills(int fieldSize, std::vector<Personage*>& enemies);
     virtual void moveRight(int fieldSize, const std::vector<Personage*>& enemies);
     virtual void moveLeft(int fieldSize, const std::vector<Personage*>& enemies);
     virtual void turnAround();

@@ -50,4 +50,6 @@ static std::vector<LevelData> Levels =
     }),
 };
 
+extern std::vector<LevelData> Levels;
+
 #endif

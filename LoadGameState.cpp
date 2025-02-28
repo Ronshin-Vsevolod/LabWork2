@@ -1,4 +1,5 @@
 #include "LoadGameState.h"
+#include "PurchaseState.h"
 #include <iostream>
 
 LoadGameState::LoadGameState(GameManager* gameManager)
@@ -10,10 +11,13 @@ void LoadGameState::enter()
 {
     std::cout << "Загрузка сохранения...\n";
     gameManager->loadGame();
-    std::cout << "Баланс монет: " << gameManager->getPlayer()->playerData->money << "\n";
-    std::cout << "Черепы: " << gameManager->getPlayer()->playerData->skulls << "\n";
-    std::cout << "Здоровье: " << gameManager->getPlayer()->playerData->health << "/" << gameManager->getPlayer()->playerData->maxHP << "\n";
-    gameManager->changeState(new BattleState(gameManager));
+
+    Player* player = gameManager->getPlayer();
+    std::cout << "Баланс монет: " << player->playerData->money << "\n";
+    std::cout << "Черепы: " << player->playerData->skulls << "\n";
+    std::cout << "Здоровье: " << player->health << "/" << player->playerData->maxHP << "\n";
+
+    gameManager->changeState(new PurchaseState(gameManager));
 }
 
 void LoadGameState::exit()

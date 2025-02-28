@@ -37,8 +37,8 @@ void BattleState::enter()
 
         if (gameManager->getPlayer()->health <= 0)
         {
-            std::cout << "Игрок погиб!\n";
-            gameManager->getPlayer()->resetOnDeath();
+            gameManager->getPlayer()->playerData->resetOnDeath();
+            gameManager->changeState(new MainMenuState(gameManager));
             break;
         }
         
@@ -71,9 +71,10 @@ void BattleState::handlePlayerTurn(const std::string& inputData) {
         if (input == "attack")
         {
             std::vector<Personage*> enemies;
-            for (const auto& enemy : levelManager->getEnemies())
+            for (std::vector<std::shared_ptr<Enemy>>::const_iterator enemyIt = levelManager->getEnemies().begin();
+                enemyIt != levelManager->getEnemies().end(); ++enemyIt)
             {
-                enemies.push_back(enemy.get());
+                enemies.push_back(enemyIt->get());
             }
 
             if (!player->skills.empty())

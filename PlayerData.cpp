@@ -1,4 +1,5 @@
 #include "PlayerData.h"
+#include <iostream>
 
 PlayerData::PlayerData()
     : money(0), skulls(0), health(100), maxHP(100)
@@ -8,7 +9,6 @@ PlayerData::PlayerData()
 void PlayerData::resetOnDeath()
 {
     money = 0;
-    skulls = 0;
     health = 100;
     maxHP = 100;
     skills.clear();

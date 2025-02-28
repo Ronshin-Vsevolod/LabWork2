@@ -3,11 +3,16 @@ game core development: character and ability hierarchy based on class inheritanc
 */
 
 #include "GameManager.h"
+#include "MainMenuState.h"
 #include <iostream>
 
 int main(int argc, char **argv)
 {
     GameManager gameManager;
-    gameManager.startGame();
+
+    MainMenuState mainMenuState(&gameManager);
+    mainMenuState.enter();
+
+    std::cout << "Игра завершена. До свидания!\n";
     return 0;
 }

@@ -1,4 +1,6 @@
 #include "PurchaseState.h"
+#include "BattleState.h"
+#include "MainMenuState.h"
 
 PurchaseState::PurchaseState(GameManager* gameManager)
     : gameManager(gameManager), player(gameManager->getPlayer())
@@ -21,7 +23,17 @@ void PurchaseState::exit()
 
 void PurchaseState::handleInput(const std::string& inputData)
 {
-    if (inputData == "1")
+    if (inputData == "back")
+    {
+        std::cout << "Возврат в главное меню.\n";
+        gameManager->changeState(new MainMenuState(gameManager));
+    }
+    else if (inputData == "start_battle")
+    {
+        std::cout << "Начинается битва на уровне " << gameManager->getCurrentLevelData()->levelNumber << "!\n";
+        gameManager->changeState(new BattleState(gameManager));
+    }
+    else if (inputData == "1")
     {
         upgradeSkill();
     }
@@ -32,11 +44,6 @@ void PurchaseState::handleInput(const std::string& inputData)
     else if (inputData == "3")
     {
         increaseMaxHP();
-    }
-    else if (inputData == "4")
-    {
-        std::cout << "Возврат в главное меню.\n";
-        gameManager->changeState(new MainMenuState(gameManager));
     }
     else
     {
@@ -49,26 +56,27 @@ void PurchaseState::upgradeSkill()
     std::cout << "Выберите навык для улучшения:\n";
     for (const std::shared_ptr<Skill>& skill : player->playerData->skills)
     {
-        std::unordered_map<std::string, SkillInfo>::iterator it = SkillRegistry.find(skill->name);
+        std::unordered_map<std::string, std::shared_ptr<Skill>>::iterator it = SkillRegistry.find(skill->name);
         if (it != SkillRegistry.end())
         {
-            std::cout << skill->name << " - " << it->second.coinCost << " монет\n";
+            std::cout << skill->name << " - " << it->second->coinCost << " монет\n";
         }
     }
 
     std::string skillName;
     std::cin >> skillName;
 
-    std::unordered_map<std::string, SkillInfo>::iterator it = SkillRegistry.find(skillName);
+    std::unordered_map<std::string, std::shared_ptr<Skill>>::iterator it = SkillRegistry.find(skillName);
     if (it != SkillRegistry.end())
     {
-        if (upgradeSkill(it->second.skill, player->playerData->money))
+        if (player->playerData->money >= it->second->coinCost)
         {
-            std::cout << "Навык " << skillName << " улучшен!\n";
+            player->playerData->money -= it->second->coinCost;
+            it->second->upgrade();
         }
         else
         {
-            std::cout << "Не удалось улучшить навык.\n";
+            std::cout << "Недостаточно денег для улучшения навыка.\n";
         }
     }
     else
@@ -103,17 +111,4 @@ void PurchaseState::increaseMaxHP()
     {
         std::cout << "Недостаточно денег для увеличения максимума HP.\n";
     }
-}
-
-bool PurchaseState::upgradeSkill(std::shared_ptr<Skill> skill, int& money)
-{
-    auto it = SkillRegistry.find(skill->name);
-    if (it != SkillRegistry.end() && money >= it->second.coinCost)
-    {
-        money -= it->second.coinCost;
-        skill->damage += 1;
-        std::cout << "Навык " << skill->name << " улучшен! Новый урон: " << skill->damage << "\n";
-        return true;
-    }
-    return false;
 }
