@@ -1,6 +1,7 @@
 PROJECT = game
 
 LIBPROJECT = $(PROJECT).a
+LIBTESTPROJECT = $(PROJECT)-test.a
 
 TESTPROJECT = test-$(PROJECT)
 
@@ -10,34 +11,49 @@ A = ar
 
 AFLAGS = rsv
 
-CXXFLAGS = -I. -std=c++17 -Werror -Wpedantic -Wall -g -fPIC
+CXXFLAGS = -Iinclude -std=c++17 -Werror -Wpedantic -Wall -g -fPIC
 
 LDXXFLAGS = $(CCXFLAGS) -L. -l:$(LIBPROJECT)
+LDTESTXXFLAGS = $(CCXFLAGS) -L. -l:$(LIBTESTPROJECT)
 
-LDGTESTFLAGS = $(LDXXFLAGS) -lgtest -lgtest_main -lpthread
+LDGTESTFLAGS = -lgtest -lgtest_main -lpthread
 
-DEPS=$(wildcard *.h)
+DEPS=$(wildcard include/*.h)
 
-OBJ=Main.o BattleState.o Enemy.o EnemyAI.o GameManager.o LevelData.o LevelManager.o LoadGameState.o MainMenuState.o Personage.o Player.o PlayerData.o PurchaseState.o Skills.o SkullShopState.o
+SRC=$(wildcard src/*.cpp)
+OBJ=$(patsubst src/%.cpp,%.o,$(SRC))
+
+# Получаем Main.o напрямую из src/Main.cpp
+MAIN_OBJ=Main.o
 
 TEST-OBJ=GoogleTest.o
+
+# Исключаем Main.o из объектных файлов при сборке тестовой библиотеки
+TEST-LIB-OBJ=$(filter-out $(MAIN_OBJ), $(OBJ))
 
 .PHONY: default
 
 default: all;
 
-%.o: %.cpp $(DEPS)
+# Компиляция .cpp файлов из директории src
+%.o: src/%.cpp $(DEPS)
+	$(CXX) -c -o $@ $< $(CXXFLAGS)
+
+# Компиляция тестовых файлов в корневой директории
+GoogleTest.o: GoogleTest.cpp $(DEPS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
 $(LIBPROJECT): $(OBJ)
 	$(A) $(AFLAGS) $@ $^
 
-$(PROJECT): Main.o $(LIBPROJECT)
-	$(CXX) -o $@ Main.o $(LDXXFLAGS)
+$(LIBTESTPROJECT): $(TEST-LIB-OBJ)
+	$(A) $(AFLAGS) $@ $^
 
+$(PROJECT): $(MAIN_OBJ) $(LIBPROJECT)
+	$(CXX) -o $@ $(MAIN_OBJ) $(LDXXFLAGS)
 
-$(TESTPROJECT): $(LIBPROJECT) $(TEST-OBJ)
-	$(CXX) -o $@ $(TEST-OBJ) $(LDGTESTFLAGS)
+$(TESTPROJECT): $(TEST-OBJ) $(LIBTESTPROJECT)
+	$(CXX) -o $@ $(TEST-OBJ) $(LDTESTXXFLAGS) $(LDGTESTFLAGS)
 
 test: $(TESTPROJECT)
 
@@ -51,4 +67,5 @@ clean:
 cleanall: clean
 	rm -f $(PROJECT)
 	rm -f $(LIBPROJECT)
+	rm -f $(LIBTESTPROJECT)
 	rm -f $(TESTPROJECT)
