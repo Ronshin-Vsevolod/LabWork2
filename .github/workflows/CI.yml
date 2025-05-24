@@ -26,4 +26,5 @@ jobs:
         run: make test
 
       - name: Run tests
-        run: ./test-game
+        timeout-minutes: 5
+        run: ./test-game < /dev/null
