@@ -1,0 +1,100 @@
+TEST REPORT
+
+1. Combat System Testing (CombatSystemTest)
+   1.1. impactOfSkills - Results
+       - Skill preparation functions correctly
+       - Stack size limitation works as expected
+       - Damage application is correctly calculated
+       - Healing skills restore health as intended
+       Status: PASSED
+
+   1.2. Effects - Results
+       - Effects are properly added to characters
+       - Effect triggers work appropriately based on their type
+       - Effect duration decreases as expected
+       - Expired effects are automatically removed
+       Status: PASSED
+
+2. Enemy AI Testing (EnemyAITest)
+   2.1. BasicBehavior - Results
+       - Enemies correctly move towards the player
+       - Obstacle avoidance logic works properly
+       - Blocked path handling prevents collisions
+       Status: PASSED
+
+   2.2. MilitaryBehavior - Results
+       - Skill selection based on distance functions correctly
+       - Ranged attacks are used at appropriate distances
+       - Melee attacks are used when in close combat
+       - Damage is properly applied to the player
+       Status: PASSED
+
+3. Level System Testing (LevelSystemTest)
+   3.1. LevelSystem - Results
+       - Occupied cells tracking is accurate
+       - Character placement follows game rules
+       - Enemy spawning works correctly
+       - Dead enemies are properly removed from the map
+       - Level rewards are correctly calculated and awarded
+       Status: PASSED
+
+   3.2. EnemyWaves - Results
+       - Wave spawning follows the correct sequence
+       - Maximum enemy count limitation works as expected
+       - Enemy types match the wave configuration
+       - Enemy placement on the map avoids collisions
+       Status: PASSED
+
+4. Shop System Testing (ShopSystem)
+   4.1. PurchaseShop - Results
+       - MaxHP increase functionality works correctly
+       - Skill upgrades increase damage as expected
+       - Health restoration is properly calculated
+       - Skill purchasing adds skills to the player's inventory
+       - Duplicate purchase prevention works correctly
+       Status: PASSED
+       Issues:
+       - Tests require manual input, which blocks CI pipeline execution
+
+   4.2. skullShop - Results
+       - Available skills are correctly displayed
+       - Skill unlocking mechanics work as expected
+       - Skull counter decreases appropriately
+       - Unlocked skills are added to the available list
+       Status: PASSED
+       Issues:
+       - Tests require manual input, which blocks CI pipeline execution
+
+5. Game Flow Testing (GameManagerTest)
+   5.1. GameFlow - Results
+       - State transitions work correctly
+       - Shop opening mechanics function as expected
+       - New game initialization sets correct default values
+       - Level completion and advancement work correctly
+       Status: PASSED
+
+6. Save/Load Cycle Testing (SaveLoadCycle)
+   6.1. SaveLoad - Results
+       - Player state (money, skulls, health) is saved and loaded correctly
+       - Player skills are preserved between sessions
+       - Current level is properly saved and restored
+       - Loaded data matches the saved state
+       Status: PASSED
+
+   6.2. WithoutSave - Results
+       - Player initialization with default values works correctly
+       - New save creation functions properly
+       - Loading a newly created save works as expected
+       Status: PASSED
+
+TEST COVERAGE:
+
+   - Current test coverage provides good functionality verification
+   - Recommendation: Add more edge case testing, especially for error handling and invalid inputs
+
+CONCLUSION:
+
+The test suite demonstrates that the core gameplay mechanics function as intended, with only minor issues in user input handling during testing.
+The recommended implementations of InputGuard and state initialization fixes have addressed the main issues that were blocking automated testing.
+The game's systems (combat, AI, levels, shops, progression, save/load) all pass their respective test cases, demonstrating the stability of the core gameplay loop.
+Future testing should focus on edge cases, performance under stress conditions, and adding tests for new features as they are developed. 
