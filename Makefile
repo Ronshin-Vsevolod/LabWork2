@@ -23,23 +23,19 @@ DEPS=$(wildcard include/*.h)
 SRC=$(wildcard src/*.cpp)
 OBJ=$(patsubst src/%.cpp,%.o,$(SRC))
 
-# Получаем Main.o напрямую из src/Main.cpp
 MAIN_OBJ=Main.o
 
 TEST-OBJ=GoogleTest.o
 
-# Исключаем Main.o из объектных файлов при сборке тестовой библиотеки
 TEST-LIB-OBJ=$(filter-out $(MAIN_OBJ), $(OBJ))
 
 .PHONY: default
 
 default: all;
 
-# Компиляция .cpp файлов из директории src
 %.o: src/%.cpp $(DEPS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
-# Компиляция тестовых файлов в корневой директории
 GoogleTest.o: GoogleTest.cpp $(DEPS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 

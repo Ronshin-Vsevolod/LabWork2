@@ -514,7 +514,7 @@ TEST(SaveLoadCycle, SaveLoad)
     gm.getPlayer().playerData->maxHP = 20;
     gm.getPlayer().playerData->currentLevel = 3;
 
-    auto testSkill = std::make_shared<ClassicSkill>("Тестовый навык", 2, 2, std::vector<int>{2}, 0, 0);
+    auto testSkill = std::make_shared<ClassicSkill>("Test skill", 2, 2, std::vector<int>{2}, 0, 0);
     gm.getPlayer().skills.push_back(testSkill);
 
     gm.saveGame();
@@ -537,7 +537,7 @@ TEST(SaveLoadCycle, SaveLoad)
     EXPECT_EQ(gm.getCurrentLevelIndex(), 3);
 
     EXPECT_EQ(gm.getPlayer().skills.size(), 1);
-    EXPECT_EQ(gm.getPlayer().skills[0]->name, "Тестовый навык");
+    EXPECT_EQ(gm.getPlayer().skills[0]->name, "Test skill");
 
     std::remove("SaveFile");
 }
