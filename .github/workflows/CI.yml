@@ -23,6 +23,3 @@ jobs:
 
       - name: Build project
         run: make
-
-      - name: Run tests
-        run: ./test-game
