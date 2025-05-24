@@ -4,7 +4,6 @@ game core development: character and ability hierarchy based on class inheritanc
 
 #include <gtest/gtest.h>
 
-
 int Runner(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
