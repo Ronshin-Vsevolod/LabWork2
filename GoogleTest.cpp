@@ -357,6 +357,45 @@ TEST(LevelSystemTest, EnemyWaves)
     EXPECT_EQ(lm.getEnemies().size(), maxPossibleEnemies);
 }
 
+TEST(GameManagerTest, GameFlow)
+{
+    GameManager gm;
+
+    EXPECT_EQ(gm.getCurrentState(), nullptr);
+
+    gm.changeState(new MainMenuState(&gm));
+    EXPECT_EQ(typeid(*gm.getCurrentState()), typeid(MainMenuState));
+
+    gm.openSkullShop();
+    EXPECT_EQ(typeid(*gm.getCurrentState()), typeid(SkullShopState));
+
+    gm.changeState(new MainMenuState(&gm));
+    EXPECT_EQ(typeid(*gm.getCurrentState()), typeid(MainMenuState));
+
+    gm.startNewGame();
+    EXPECT_EQ(typeid(*gm.getCurrentState()), typeid(BattleState));
+    EXPECT_EQ(gm.getCurrentLevelIndex(), 0);
+
+    gm.openPurchaseState();
+    EXPECT_EQ(typeid(*gm.getCurrentState()), typeid(PurchaseState));
+
+    gm.changeState(new BattleState(&gm));
+    EXPECT_EQ(typeid(*gm.getCurrentState()), typeid(BattleState));
+
+    int currentLevelIndex = gm.getCurrentLevelIndex();
+
+    gm.completeCurrentLevel();
+
+    EXPECT_EQ(gm.getCurrentLevelIndex(), currentLevelIndex + 1);
+
+    EXPECT_EQ(typeid(*gm.getCurrentState()), typeid(PurchaseState));
+
+    GameManager newGm;
+    newGm.continueGame();
+    EXPECT_EQ(typeid(*newGm.getCurrentState()), typeid(LoadGameState));
+
+    gm.saveGame();
+}
 
 
 TEST(ShopSystem, PurchaseShop)
