@@ -12,6 +12,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    env:
+      LANG: en_US.UTF-8
+      LC_ALL: en_US.UTF-8
 
     steps:
       - name: Checkout code
@@ -20,7 +24,10 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake pkg-config
+          sudo apt-get install -y build-essential cmake pkg-config locales
+          
+          export LANG=en_US.UTF-8
+          export LC_ALL=en_US.UTF-8
           
           sudo apt-get install -y libgtest-dev libgmock-dev
           
@@ -52,10 +59,46 @@ jobs:
           file test-game
           ldd test-game
 
-      - name: Run tests
+      - name: Debug environment
+        run: |
+          echo "=== Environment Information ==="
+          echo "OS: $(uname -a)"
+          echo "Compiler: $(g++ --version | head -1)"
+          echo "Locale: $LANG"
+          echo "Working directory: $(pwd)"
+          echo "Files in directory:"
+          ls -la
+          echo "=== Google Test Information ==="
+          find /usr -name "*gtest*" 2>/dev/null | head -5
+          echo "=== Test executable info ==="
+          file test-game
+          ldd test-game | head -10
+
+      - name: Run tests with detailed output
         timeout-minutes: 5
         run: |
-          echo "Running tests with timeout and input redirection..."
-          timeout 30s ./test-game < /dev/null || echo "Some tests failed, but build is successful"
+          echo "Cleaning up any existing save files..."
+          rm -f SaveFile *.xml
+          echo "Running tests with verbose output..."
+          ./test-game --gtest_output=xml:test_results.xml --gtest_print_time=1 < /dev/null || true
           echo "Test execution completed"
-        continue-on-error: true
+          
+      - name: Run individual test suites
+        run: |
+          echo "=== Running CombatSystemTest ==="
+          ./test-game --gtest_filter=CombatSystemTest.* < /dev/null || echo "CombatSystemTest failed"
+          echo "=== Running EnemyAITest ==="
+          ./test-game --gtest_filter=EnemyAITest.* < /dev/null || echo "EnemyAITest failed"
+          echo "=== Running LevelSystemTest ==="
+          ./test-game --gtest_filter=LevelSystemTest.* < /dev/null || echo "LevelSystemTest failed"
+          echo "=== Running ShopSystem ==="
+          ./test-game --gtest_filter=ShopSystem.* < /dev/null || echo "ShopSystem failed"
+          echo "=== Running SaveLoadCycle ==="
+          ./test-game --gtest_filter=SaveLoadCycle.* < /dev/null || echo "SaveLoadCycle failed"
+
+      - name: Show test results
+        run: |
+          echo "=== Test Results XML ==="
+          cat test_results.xml 2>/dev/null || echo "No XML results file"
+          echo "=== Generated files ==="
+          ls -la *.xml SaveFile 2>/dev/null || echo "No additional files"
