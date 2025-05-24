@@ -62,7 +62,7 @@ void PlayerData::saveToFile() const
     std::ofstream file(filename);
     if (!file.is_open())
     {
-        std::cerr << "Ошибка: не удалось открыть файл для записи.\n";
+        std::cerr << "Error: failed to open file for writing.\n";
         return;
     }
 
@@ -85,7 +85,7 @@ void PlayerData::saveToFile() const
         file << skillName << std::endl;
     }
 
-    std::cout << "Игра сохранена: " << unlockedSkills.size() << " разблокированных навыков\n";
+    std::cout << "Game saved: " << unlockedSkills.size() << " unlocked skills\n";
     file.close();
 }
 
@@ -97,7 +97,7 @@ void PlayerData::loadFromFile()
 
     if (file.is_open())
     {
-        std::cout << "Открытие файла сохранения...\n";
+        std::cout << "Opening save file...\n";
 
         try
         {
@@ -105,35 +105,35 @@ void PlayerData::loadFromFile()
 
             if (!std::getline(file, line) || !(std::stringstream(line) >> currentLevel))
             {
-                std::cerr << "Ошибка при чтении уровня\n";
+                std::cerr << "Error reading level\n";
                 initDefaultState();
                 return;
             }
 
             if (!std::getline(file, line) || !(std::stringstream(line) >> money))
             {
-                std::cerr << "Ошибка при чтении денег\n";
+                std::cerr << "Error reading money\n";
                 initDefaultState();
                 return;
             }
 
             if (!std::getline(file, line) || !(std::stringstream(line) >> skulls))
             {
-                std::cerr << "Ошибка при чтении черепов\n";
+                std::cerr << "Error reading skulls\n";
                 initDefaultState();
                 return;
             }
 
             if (!std::getline(file, line) || !(std::stringstream(line) >> health))
             {
-                std::cerr << "Ошибка при чтении здоровья\n";
+                std::cerr << "Error reading health\n";
                 initDefaultState();
                 return;
             }
 
             if (!std::getline(file, line) || !(std::stringstream(line) >> maxHP))
             {
-                std::cerr << "Ошибка при чтении максимального здоровья\n";
+                std::cerr << "Error reading maximum health\n";
                 initDefaultState();
                 return;
             }
@@ -142,7 +142,7 @@ void PlayerData::loadFromFile()
             int gameStateValue = 0;
             if (!std::getline(file, line) || !(std::stringstream(line) >> gameStateValue))
             {
-                std::cerr << "Ошибка при чтении текущего состояния игры\n";
+                std::cerr << "Error reading current game state\n";
                 initDefaultState();
                 return;
             }
@@ -151,19 +151,19 @@ void PlayerData::loadFromFile()
                 currentGameState = static_cast<GameStateType>(gameStateValue);
             }
 
-            std::cout << "Базовые параметры загружены: уровень=" << currentLevel
-                      << ", деньги=" << money << ", черепа=" << skulls
-                      << ", состояние=" << static_cast<int>(currentGameState) << "\n";
+            std::cout << "Base parameters loaded: level=" << currentLevel
+                      << ", money=" << money << ", skulls=" << skulls
+                      << ", state=" << static_cast<int>(currentGameState) << "\n";
 
             size_t skillCount = 0;
             if (!std::getline(file, line) || !(std::stringstream(line) >> skillCount))
             {
-                std::cerr << "Предупреждение: не удалось прочитать количество навыков\n";
+                std::cerr << "Warning: failed to read skill count\n";
                 initDefaultState();
                 return;
             }
 
-            std::cout << "Найдено " << skillCount << " навыков для загрузки\n";
+            std::cout << "Found " << skillCount << " skills to load\n";
             skills.clear();
 
             for (size_t i = 0; i < skillCount; ++i)
@@ -171,26 +171,26 @@ void PlayerData::loadFromFile()
                 std::string skillName;
                 if (!std::getline(file, skillName))
                 {
-                    std::cerr << "Предупреждение: не удалось прочитать навык #" << i + 1 << "\n";
+                    std::cerr << "Warning: failed to read skill #" << i + 1 << "\n";
                     initDefaultState();
                     return;
                 }
 
-                std::cout << "Загружен навык: \"" << skillName << "\"\n";
+                std::cout << "Loaded skill: \"" << skillName << "\"\n";
                 if (SkillFactory::registry.find(skillName) != SkillFactory::registry.end())
                 {
                     skills.push_back(SkillFactory::registry[skillName]());
                 }
                 else
                 {
-                    std::cerr << "Предупреждение: навык '" << skillName << "' не найден в реестре\n";
+                    std::cerr << "Warning: skill '" << skillName << "' not found in registry\n";
                 }
             }
 
             size_t unlockedCount = 0;
             if (!std::getline(file, line) || !(std::stringstream(line) >> unlockedCount))
             {
-                std::cerr << "Предупреждение: не удалось прочитать количество разблокированных навыков\n";
+                std::cerr << "Warning: failed to read number of unlocked skills\n";
 
                 unlockedSkills.clear();
                 unlockedSkills.insert("Katana");
@@ -200,7 +200,7 @@ void PlayerData::loadFromFile()
             }
             else
             {
-                std::cout << "Найдено " << unlockedCount << " разблокированных навыков\n";
+                std::cout << "Found " << unlockedCount << " unlocked skills\n";
 
                 unlockedSkills.clear();
 
@@ -209,11 +209,11 @@ void PlayerData::loadFromFile()
                     std::string skillName;
                     if (!std::getline(file, skillName))
                     {
-                        std::cerr << "Предупреждение: не удалось прочитать разблокированный навык #" << i + 1 << "\n";
+                        std::cerr << "Warning: failed to read unlocked skill #" << i + 1 << "\n";
                         continue;
                     }
 
-                    std::cout << "Загружен разблокированный навык: \"" << skillName << "\"\n";
+                    std::cout << "Loaded unlocked skill: \"" << skillName << "\"\n";
 
 
                     if (SkillFactory::registry.find(skillName) != SkillFactory::registry.end())
@@ -222,7 +222,7 @@ void PlayerData::loadFromFile()
                     } 
                     else
                     {
-                        std::cerr << "Предупреждение: навык '" << skillName << "' не найден в реестре и не был добавлен\n";
+                        std::cerr << "Warning: skill '" << skillName << "' not found in registry and not added\n";
                     }
                 }
                 
@@ -231,23 +231,23 @@ void PlayerData::loadFromFile()
                 unlockedSkills.insert("Holy Grenade");
                 unlockedSkills.insert("Yari");
 
-                std::cout << "Итого загружено " << unlockedSkills.size() << " разблокированных навыков\n";
+                std::cout << "Total loaded " << unlockedSkills.size() << " unlocked skills\n";
             }
 
 
             if (skills.empty())
             {
-                std::cerr << "Предупреждение: не загружено ни одного навыка. Загружены навыки по умолчанию\n";
+                std::cerr << "Warning: no skills loaded. Default skills loaded\n";
 
                 skills.clear();
                 initDefaultSkills();
             }
 
-            std::cout << "Сохранение успешно загружено\n";
+            std::cout << "Save successfully loaded\n";
         }
         catch (const std::exception& e)
         {
-            std::cerr << "Ошибка при загрузке сохранения: " << e.what() << "\n";
+            std::cerr << "Error loading save: " << e.what() << "\n";
             initDefaultState();
         }
 

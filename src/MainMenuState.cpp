@@ -13,16 +13,16 @@ game core development: character and ability hierarchy based on class inheritanc
 const std::vector<MenuCommandInfo> MainMenuState::availableCommands =
 {
     {
-        "new_game", "Начать новую игру", 1
+        "new_game", "Start new game", 1
     },
     {
-        "continue", "Продолжить игру", 2
+        "continue", "Continue game", 2
     },
     {
-        "skull_shop", "Открыть магазин черепов", 3
+        "skull_shop", "Open skull shop", 3
     },
     {
-        "exit", "Выйти из игры", 0
+        "exit", "Exit game", 0
     }
 };
 
@@ -31,7 +31,7 @@ MainMenuState::MainMenuState(GameManager* gameManager, bool hasSave)
 
 void MainMenuState::enter()
 {
-    std::cout << "Вход в главное меню.\n";
+    std::cout << "Enter main menu.\n";
     std::string inputData;
     bool shouldExit = false;
 
@@ -46,12 +46,12 @@ void MainMenuState::enter()
 
 void MainMenuState::exit()
 {
-    std::cout << "Выход из главного меню.\n";
+    std::cout << "Exit from main menu.\n";
 }
 
 void MainMenuState::printAvailableCommands() const
 {
-    std::cout << "\nДоступные команды:\n";
+    std::cout << "\nAvailable commands:\n";
     for (const MenuCommandInfo& cmd : availableCommands)
     {
         if (cmd.name == "continue" && !hasSave)
@@ -60,7 +60,7 @@ void MainMenuState::printAvailableCommands() const
         }
         std::cout << cmd.number << ". " << cmd.name << " - " << cmd.description << "\n";
     }
-    std::cout << "\nВведите номер команды или её название: ";
+    std::cout << "\nEnter the command number or its name: ";
 }
 
 MenuCommand MainMenuState::parseCommand(const std::string& input)
@@ -107,32 +107,32 @@ bool MainMenuState::handleInput(const std::string& inputData)
     switch (command)
     {
         case MenuCommand::EXIT:
-            std::cout << "Выход из игры.\n";
+            std::cout << "Exit from game.\n";
             return true;
 
         case MenuCommand::NEW_GAME:
-            std::cout << "Начало новой игры.\n";
+            std::cout << "Start new game.\n";
             gameManager->startNewGame();
             return true;
 
         case MenuCommand::CONTINUE:
             if (hasSave)
             {
-                std::cout << "Продолжение игры.\n";
+                std::cout << "Continue game.\n";
                 gameManager->continueGame();
                 return true;
             }
             break;
 
         case MenuCommand::SKULL_SHOP:
-            std::cout << "Открытие магазина черепов.\n";
-            std::cout << "У вас " << gameManager->getPlayerData()->skulls << " черепов.\n";
+            std::cout << "Opening skull shop.\n";
+            std::cout << "You have " << gameManager->getPlayerData()->skulls << " skulls.\n";
             gameManager->openSkullShop();
             return true;
 
         case MenuCommand::UNKNOWN:
         default:
-            std::cout << "Неизвестная команда.\n";
+            std::cout << "Unknown command.\n";
             break;
     }
 

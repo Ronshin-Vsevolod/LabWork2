@@ -11,13 +11,13 @@ game core development: character and ability hierarchy based on class inheritanc
 const std::vector<ShopCommandInfo> SkullShopState::availableCommands =
 {
     {
-        "unlock", "Разблокировать навык", 1
+        "unlock", "Unlock skill", 1
     },
     {
-        "show_skills", "Показать доступные навыки", 2
+        "show_skills", "Show available skills", 2
     },
     {
-        "back", "Вернуться в главное меню", 0
+        "back", "Return to main menu", 0
     }
 };
 
@@ -26,7 +26,7 @@ SkullShopState::SkullShopState(GameManager* gameManager)
 
 void SkullShopState::enter()
 {
-    std::cout << "Вход в магазин черепов.\n";
+    std::cout << "Enter the skull shop.\n";
     showAvailableSkills();
 
     std::string inputData;
@@ -44,17 +44,17 @@ void SkullShopState::enter()
 
 void SkullShopState::exit()
 {
-    std::cout << "Выход из магазина черепов.\n";
+    std::cout << "Exit from the skull shop.\n";
 }
 
 void SkullShopState::printAvailableCommands() const
 {
-    std::cout << "\nДоступные команды:\n";
+    std::cout << "\nAvailable commands:\n";
     for (const ShopCommandInfo& cmd : availableCommands)
     {
         std::cout << cmd.number << ". " << cmd.name << " - " << cmd.description << "\n";
     }
-    std::cout << "\nВведите номер команды или её название: ";
+    std::cout << "\nEnter the command number or its name: ";
 }
 
 ShopCommand SkullShopState::parseCommand(const std::string& input)
@@ -97,9 +97,9 @@ ShopCommand SkullShopState::parseCommand(const std::string& input)
 void SkullShopState::showAvailableSkills() const
 {
     PlayerData* playerData = gameManager->getPlayerData();
-    std::cout << "\nУ вас " << playerData->skulls << " черепов.\n";
+    std::cout << "\nYou have " << playerData->skulls << " skulls.\n";
 
-    std::cout << "\nВсего разблокировано навыков: " << playerData->unlockedSkills.size() << "\n";
+    std::cout << "\nTotal unlocked skills: " << playerData->unlockedSkills.size() << "\n";
 
     std::vector<std::pair<std::string, int>> unlockedSkills;
     std::vector<std::pair<std::string, int>> lockedSkills;
@@ -120,31 +120,31 @@ void SkullShopState::showAvailableSkills() const
     }
 
 
-    std::cout << "\n==== РАЗБЛОКИРОВАННЫЕ НАВЫКИ ====\n";
+    std::cout << "\n==== UNLOCKED SKILLS ====\n";
     if (unlockedSkills.empty())
     {
-        std::cout << "Нет разблокированных навыков.\n";
+        std::cout << "No unlocked skills.\n";
     }
     else
     {
         for (const auto& pair : unlockedSkills)
         {
-            std::cout << pair.first << " - " << pair.second << " черепов [Разблокирован]\n";
+            std::cout << pair.first << " - " << pair.second << " skulls [Unlocked]\n";
         }
     }
 
 
-    std::cout << "\n==== ДОСТУПНЫЕ ДЛЯ РАЗБЛОКИРОВКИ ====\n";
+    std::cout << "\n==== AVAILABLE TO UNLOCK ====\n";
     if (lockedSkills.empty())
     {
-        std::cout << "Все навыки уже разблокированы!\n";
+        std::cout << "All skills are already unlocked!\n";
     }
     else
     {
-        std::cout << "Для разблокировки введите точное название навыка:\n";
+        std::cout << "To unlock, enter the exact skill name:\n";
         for (const auto& pair : lockedSkills)
         {
-            std::cout << pair.first << " - " << pair.second << " черепов\n";
+            std::cout << pair.first << " - " << pair.second << " skulls\n";
         }
     }
 
@@ -155,7 +155,7 @@ void SkullShopState::unlockSkill()
 {
     PlayerData* playerData = gameManager->getPlayerData();
 
-    std::cout << "\nДоступные навыки:\n";
+    std::cout << "\nAvailable skills:\n";
     std::vector<std::string> availableSkills;
     int index = 1;
 
@@ -166,7 +166,7 @@ void SkullShopState::unlockSkill()
 
         if (!playerData->isSkillUnlocked(skillName))
         {
-            std::cout << index << ". " << skillName << " - " << skill->skullCost << " черепов\n";
+            std::cout << index << ". " << skillName << " - " << skill->skullCost << " skulls\n";
             availableSkills.push_back(skillName);
             index++;
         }
@@ -174,11 +174,11 @@ void SkullShopState::unlockSkill()
 
     if (availableSkills.empty())
     {
-        std::cout << "Все навыки уже разблокированы!\n";
+        std::cout << "All skills are already unlocked!\n";
         return;
     }
 
-    std::cout << "\nВведите номер или точное название навыка: ";
+    std::cout << "\nEnter the skill number or its name: ";
     std::string input;
     std::getline(std::cin, input);
 
@@ -203,7 +203,7 @@ void SkullShopState::unlockSkill()
         }
         else
         {
-            std::cout << "Неверный номер навыка.\n";
+            std::cout << "Invalid skill number.\n";
             return;
         }
     }
@@ -220,7 +220,7 @@ void SkullShopState::unlockSkill()
 
         if (playerData->isSkillUnlocked(skillName))
         {
-            std::cout << "Навык " << skill->name << " уже разблокирован!\n";
+            std::cout << "Skill " << skill->name << " already unlocked!\n";
             return;
         }
 
@@ -231,18 +231,18 @@ void SkullShopState::unlockSkill()
 
             gameManager->saveGame();
 
-            std::cout << "Навык " << skill->name << " разблокирован!\n";
-            std::cout << "Осталось черепов: " << playerData->skulls << "\n";
+            std::cout << "Skill " << skill->name << " unlocked!\n";
+            std::cout << "Remaining skulls: " << playerData->skulls << "\n";
         }
         else
         {
-            std::cout << "Недостаточно черепов. У вас " << playerData->skulls
-                      << ", требуется " << skill->skullCost << ".\n";
+            std::cout << "Not enough skulls. You have " << playerData->skulls
+                      << ", requires " << skill->skullCost << ".\n";
         }
     }
     else
     {
-        std::cout << "Неизвестный навык. Пожалуйста, введите точное название или номер из списка.\n";
+        std::cout << "Unknown skill. Please enter the exact name or number from the list.\n";
     }
 }
 
@@ -255,7 +255,7 @@ bool SkullShopState::handleInput(const std::string& inputData)
     {
         case ShopCommand::BACK:
         {
-        std::cout << "Возврат в главное меню.\n";
+        std::cout << "Return to main menu.\n";
 
         gameManager->saveGame();
 
@@ -273,7 +273,7 @@ bool SkullShopState::handleInput(const std::string& inputData)
 
         case ShopCommand::UNKNOWN:
         default:
-            std::cout << "Неизвестная команда.\n";
+            std::cout << "Unknown command.\n";
             break;
     }
 

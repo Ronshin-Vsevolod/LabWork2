@@ -78,8 +78,8 @@ bool EnemyAI::tryTriggerPreparedSkills(Enemy* enemy, const Player& player)
     {
         if (isPlayerInSkillRange(skill.get(), distance))
         {
-            std::cout << "[AI] " << enemy->name << " намеревается применить "
-                     << skill->name << " (дистанция: " << distance << ")\n";
+            std::cout << "[AI] " << enemy->name << " is going to use "
+                     << skill->name << " (distance: " << distance << ")\n";
             return true;
         }
     }
@@ -92,7 +92,7 @@ bool EnemyAI::needsTurnToFacePlayer(Enemy* enemy, const Player& player)
 
     if (!correctDirection)
     {
-        std::cout << "[AI] " << enemy->name << " должен повернуться к игроку\n";
+        std::cout << "[AI] " << enemy->name << " should turn to the player\n";
         return true;
     }
     return false;
@@ -126,8 +126,8 @@ bool EnemyAI::tryPrepareAvailableSkill(Enemy* enemy, const Player& player)
         if (isPlayerInSkillRange(enemy->skills[i].get(), distance))
         {
             enemy->path = i + 1;
-            std::cout << "[AI] " << enemy->name << " запланировал навык "
-                     << enemy->skills[i]->name << " (может поразить игрока на дистанции "
+            std::cout << "[AI] " << enemy->name << " planned to use "
+                     << enemy->skills[i]->name << " (can hit the player at a distance of "
                      << distance << ")\n";
             return true;
         }
@@ -137,8 +137,8 @@ bool EnemyAI::tryPrepareAvailableSkill(Enemy* enemy, const Player& player)
     if (availableSkillIndex != -1)
     {
         enemy->path = availableSkillIndex + 1;
-        std::cout << "[AI] " << enemy->name << " запланировал навык "
-                 << enemy->skills[availableSkillIndex]->name << " (не может поразить игрока сейчас)\n";
+        std::cout << "[AI] " << enemy->name << " planned to use "
+                 << enemy->skills[availableSkillIndex]->name << " (can't hit the player now)\n";
         return true;
     }
 
@@ -153,19 +153,19 @@ bool EnemyAI::tryMoveTowardPlayer(Enemy* enemy, const LevelManager& lm)
 
     if (targetPos < 0 || targetPos >= fieldSize)
     {
-        std::cout << "[AI] " << enemy->name << " упёрся в край поля\n";
+        std::cout << "[AI] " << enemy->name << " hit the edge of the field\n";
         return false;
     }
 
     if (!lm.getOccupiedCells()[targetPos])
     {
         enemy->path = (step > 0) ? -3 : -4;
-        std::cout << "[AI] " << enemy->name << " движется на позицию "
+        std::cout << "[AI] " << enemy->name << " moves to position "
                  << targetPos << "\n";
         return true;
     }
 
-    std::cout << "[AI] " << enemy->name << " заблокирован на позиции "
+    std::cout << "[AI] " << enemy->name << " blocked on position "
              << enemy->location << "\n";
     return false;
 }
@@ -173,8 +173,8 @@ bool EnemyAI::tryMoveTowardPlayer(Enemy* enemy, const LevelManager& lm)
 
 void EnemyAI::handleForcedInaction(Enemy* enemy)
 {
-    std::cout << "[AI] " << enemy->name << " не может выполнить действие: "
-             << "все варианты исчерпаны\n";
+    std::cout << "[AI] " << enemy->name << " can't perform an action: "
+             << "all options are exhausted\n";
     enemy->path = 0;
 }
 
@@ -184,7 +184,7 @@ void EnemyAI::handlePositivePath(Enemy* enemy)
     if (skillIndex >= 0 && static_cast<size_t>(skillIndex) < enemy->skills.size())
     {
         enemy->prepareSkill(skillIndex);
-        std::cout << enemy->name << " подготовил "
+        std::cout << enemy->name << " prepared "
                  << enemy->skills[skillIndex]->name << "\n";
     }
     enemy->path = 0;
@@ -194,7 +194,7 @@ void EnemyAI::handleUseSkills(Enemy* enemy, Player& player, const LevelManager& 
 {
     if (!enemy->prepareStack.empty())
     {
-        std::cout << enemy->name << " использует подготовленные навыки!\n";
+        std::cout << enemy->name << " uses prepared skills!\n";
     }
 
     std::vector<Personage*> targets = {&player};
@@ -208,9 +208,9 @@ void EnemyAI::handleUseSkills(Enemy* enemy, Player& player, const LevelManager& 
 
 void EnemyAI::handleTurnAround(Enemy* enemy, Player& player, const LevelManager& levelManager)
 {
-    std::cout << enemy->name << " разворачивается!";
+    std::cout << enemy->name << " turns around!";
     enemy->turnAround();
-    std::cout << " Теперь смотрит " << (enemy->direction ? "вправо" : "влево") << "\n";
+    std::cout << " Now looks " << (enemy->direction ? "right" : "left") << "\n";
     enemy->path = 0;
 
     makeTurn(enemy, player, levelManager);
@@ -224,11 +224,11 @@ void EnemyAI::handleMoveRight(Enemy* enemy, Player& player, const LevelManager& 
     if(newPos < fieldSize && !occupied[newPos])
     {
         enemy->location = newPos;
-        std::cout << enemy->name << " переместился вправо на позицию " << newPos << "\n";
+        std::cout << enemy->name << " moved right to position " << newPos << "\n";
     }
     else
     {
-        std::cout << enemy->name << " не может переместиться вправо (позиция " << newPos << " занята или вне поля)\n";
+        std::cout << enemy->name << " can't move right (position " << newPos << " is occupied or outside the field)\n";
     }
 
     enemy->path = 0;
@@ -245,11 +245,11 @@ void EnemyAI::handleMoveLeft(Enemy* enemy, Player& player, const LevelManager& l
     if (newPosition >= 0 && !occupied[newPosition])
     {
         enemy->location = newPosition;
-        std::cout << enemy->name << " переместился влево. Новая позиция: " << newPosition << "\n";
+        std::cout << enemy->name << " moved to the left. New position: " << newPosition << "\n";
     }
     else
     {
-        std::cout << enemy->name << " не может переместиться влево (позиция " << newPosition << " занята или вне поля)\n";
+        std::cout << enemy->name << " can't move left (position " << newPosition << " is occupied or outside the field)\n";
     }
 
     enemy->path = 0;

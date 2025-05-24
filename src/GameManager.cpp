@@ -57,7 +57,7 @@ bool GameManager::loadGame()
 
     if (!loadSuccess)
     {
-        std::cout << "Сохранение не найдено или повреждено. Используются настройки по умолчанию.\n";
+        std::cout << "Save file not found or corrupted. Using default settings.\n";
         playerData->initDefaultState();
     }
 
@@ -70,14 +70,14 @@ bool GameManager::loadGame()
     {
         currentLevelIndex = 0;
         levelManager = std::make_unique<LevelManager>(&Levels[currentLevelIndex]);
-        std::cout << "Предупреждение: некорректный индекс уровня. Загружен первый уровень.\n";
+        std::cout << "Warning: incorrect level index. Loaded first level.\n";
     }
 
     updatePlayer();
 
     if (loadSuccess)
     {
-        std::cout << "Игра успешно загружена.\n";
+        std::cout << "Game successfully loaded.\n";
     }
 
     return loadSuccess;
@@ -86,15 +86,15 @@ bool GameManager::loadGame()
 void GameManager::completeCurrentLevel()
 {
     player->playerData->currentLevel = currentLevelIndex;
-    std::cout << "Уровень " << Levels[currentLevelIndex].levelNumber << " завершён!\n";
+    std::cout << "Level " << Levels[currentLevelIndex].levelNumber << " completed!\n";
 
     player->playerData->skulls += Levels[currentLevelIndex].rewardSkulls;
-    std::cout << "Получено черепов: " << Levels[currentLevelIndex].rewardSkulls << "\n";
-    std::cout << "Текущее количество черепов: " << player->playerData->skulls << "\n";
+    std::cout << "Received skulls: " << Levels[currentLevelIndex].rewardSkulls << "\n";
+    std::cout << "Current skulls: " << player->playerData->skulls << "\n";
 
     player->playerData->money += Levels[currentLevelIndex].rewardMoney;
-    std::cout << "Получено монет: " << Levels[currentLevelIndex].rewardMoney << "\n";
-    std::cout << "Текущее количество монет: " << player->playerData->money << "\n";
+    std::cout << "Received money: " << Levels[currentLevelIndex].rewardMoney << "\n";
+    std::cout << "Current money: " << player->playerData->money << "\n";
 
     currentLevelIndex++;
 
@@ -105,7 +105,7 @@ void GameManager::completeCurrentLevel()
     if (currentLevelIndex < Levels.size())
     {
         resetLevelManager(currentLevelIndex);
-        std::cout << "Начинается уровень " << Levels[currentLevelIndex].levelNumber << "!\n";
+        std::cout << "Level " << Levels[currentLevelIndex].levelNumber << " started!\n";
 
         updatePlayer();
 
@@ -113,7 +113,7 @@ void GameManager::completeCurrentLevel()
     }
     else
     {
-        std::cout << "Поздравляем! Вы прошли все уровни!\n";
+        std::cout << "Congratulations! You passed all levels!\n";
         changeState(new MainMenuState(this));
     }
 }

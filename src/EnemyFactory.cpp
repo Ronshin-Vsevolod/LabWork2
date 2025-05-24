@@ -23,7 +23,7 @@ void Enemy::makeTurn(Player& player, LevelManager& levelManager)
 {
     if (!ai)
     {
-        std::cerr << "AI не инициализирован для " << name << std::endl;
+        std::cerr << "AI not initialized for " << name << std::endl;
         return;
     }
 
@@ -71,7 +71,7 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(int fieldSize, const LevelManag
     std::vector<int> freePositions = lm.getFreePositions();
     if (freePositions.empty())
     {
-        std::cerr << "[ОШИБКА] Нет свободных позиций для спавна\n";
+        std::cerr << "[ERROR] No free positions for spawn\n";
         return nullptr;
     }
 

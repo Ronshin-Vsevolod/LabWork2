@@ -15,17 +15,17 @@ game core development: character and ability hierarchy based on class inheritanc
 
 const std::vector<PurchaseCommandInfo> PurchaseState::availableCommands = {
     {
-        "upgrade", "Улучшить навык", 1},
+        "upgrade", "Upgrade skill", 1},
     {
-        "increase_hp", "Восстановить здоровье", 2},
+        "increase_hp", "Restore health", 2},
     {
-        "increase_max_hp", "Увеличить максимальное здоровье", 3},
+        "increase_max_hp", "Increase maximum health", 3},
     {
-        "start_battle", "Начать сражение", 4},
+        "start_battle", "Start battle", 4},
     {
-        "buy_skill", "Купить навык", 5},
+        "buy_skill", "Buy skill", 5},
     {
-        "back", "Вернуться в главное меню", 0}
+        "back", "Return to main menu", 0}
     };
 
 PurchaseState::PurchaseState(GameManager* gameManager)
@@ -33,7 +33,7 @@ PurchaseState::PurchaseState(GameManager* gameManager)
 
 void PurchaseState::enter()
 {
-    std::cout << "Вход в этап покупок.\n";
+    std::cout << "Enter purchase stage.\n";
     skillPurchased = false;
     Player& player = gameManager->getPlayer();
     std::string inputData;
@@ -41,8 +41,8 @@ void PurchaseState::enter()
 
     while (!shouldExit)
     {
-        std::cout << "\nТекущие монеты: " << player.playerData->money << "\n";
-        std::cout << "Текущее здоровье: " << player.health << "/" << player.playerData->maxHP << "\n";
+        std::cout << "\nCurrent money: " << player.playerData->money << "\n";
+        std::cout << "Current health: " << player.health << "/" << player.playerData->maxHP << "\n";
 
         printAvailableCommands();
         std::getline(std::cin, inputData);
@@ -53,17 +53,17 @@ void PurchaseState::enter()
 
 void PurchaseState::exit()
 {
-    std::cout << "Выход из этапа покупок.\n";
+    std::cout << "Exit from purchase stage.\n";
 }
 
 void PurchaseState::printAvailableCommands() const
 {
-    std::cout << "\nДоступные команды:\n";
+    std::cout << "\nAvailable commands:\n";
     for (const PurchaseCommandInfo& cmd : availableCommands)
     {
         std::cout << cmd.number << ". " << cmd.name << " - " << cmd.description << "\n";
     }
-    std::cout << "\nВведите номер команды или её название: ";
+    std::cout << "\nEnter the command number or its name: ";
 }
 
 PurchaseCommand PurchaseState::parseCommand(const std::string& input)
@@ -112,7 +112,7 @@ bool PurchaseState::handleInput(const std::string& inputData)
     {
         case PurchaseCommand::BACK:
         {
-            std::cout << "Возврат в главное меню.\n";
+            std::cout << "Return to main menu.\n";
             gameManager->changeState(new MainMenuState(gameManager, true));
             return true;
         }
@@ -121,7 +121,7 @@ bool PurchaseState::handleInput(const std::string& inputData)
         {
             Player& player = gameManager->getPlayer();
 
-            std::cout << "\nВаши навыки:\n";
+            std::cout << "\nYour skills:\n";
             for (size_t i = 0; i < player.playerData->skills.size(); ++i)
             {
                 const std::shared_ptr<Skill>& skill = player.playerData->skills[i];
@@ -130,11 +130,11 @@ bool PurchaseState::handleInput(const std::string& inputData)
 
             if (player.playerData->skills.empty())
             {
-                std::cout << "У вас нет навыков для улучшения!\n";
+                std::cout << "You don't have skills to upgrade!\n";
                 return false;
             }
 
-            std::cout << "Введите номер навыка для улучшения: ";
+            std::cout << "Enter the skill number to upgrade: ";
             std::string input;
             std::getline(std::cin, input);
 
@@ -147,20 +147,20 @@ bool PurchaseState::handleInput(const std::string& inputData)
             int cost = 2;
             if (player.playerData->money < cost)
             {
-                std::cout << "Недостаточно монет для лечения (требуется " << cost << ").\n";
+                std::cout << "Not enough money for healing (requires " << cost << ").\n";
                 return false;
             }
 
             if (player.health >= player.playerData->maxHP)
             {
-                std::cout << "Здоровье уже на максимуме!\n";
+                std::cout << "Health is already at maximum!\n";
                 return false;
             }
 
             player.playerData->money -= cost;
             player.health = player.playerData->maxHP;
 
-            std::cout << "Здоровье полностью восстановлено: "
+            std::cout << "Health fully restored: "
                       << player.health << "/" << player.playerData->maxHP << "\n";
             break;
         }
@@ -179,7 +179,7 @@ bool PurchaseState::handleInput(const std::string& inputData)
 
         case PurchaseCommand::START_BATTLE:
         {  
-            std::cout << "Переход к боевому этапу.\n";
+            std::cout << "Transition to battle stage.\n";
 
 
             gameManager->getPlayerData()->currentGameState = GameStateType::BATTLE;
@@ -194,7 +194,7 @@ bool PurchaseState::handleInput(const std::string& inputData)
         case PurchaseCommand::UNKNOWN:  
         default:
         {
-            std::cout << "Неизвестная команда.\n";
+            std::cout << "Unknown command.\n";
             break;
         }
     }
@@ -217,7 +217,7 @@ void PurchaseState::upgradeSkill(Player& player, std::string input)
 
     if (!isValidNumber)
     {
-        std::cout << "Ошибка: введите корректный номер навыка!\n";
+        std::cout << "Error: enter a valid skill number!\n";
         return;
     }
 
@@ -225,7 +225,7 @@ void PurchaseState::upgradeSkill(Player& player, std::string input)
 
     if (choice < 1 || choice > player.playerData->skills.size())
     {
-        std::cout << "Ошибка: введите корректный номер навыка!\n";
+        std::cout << "Error: enter a valid skill number!\n";
         return;
     }
 
@@ -233,7 +233,7 @@ void PurchaseState::upgradeSkill(Player& player, std::string input)
     ClassicSkill* classicSkill = dynamic_cast<ClassicSkill*>(selectedSkill.get());
     if (!classicSkill)
     {
-        std::cout << "Этот навык пока нельзя улучшить!\n";
+        std::cout << "This skill can't be upgraded yet!\n";
         return;
     }
 
@@ -241,13 +241,13 @@ void PurchaseState::upgradeSkill(Player& player, std::string input)
     {
         player.playerData->money -= selectedSkill->coinCost;
         classicSkill->upgrade();
-        std::cout << "Навык " << selectedSkill->name
-                  << " улучшен! Новый урон: " << classicSkill->damage << "\n";
+        std::cout << "Skill " << selectedSkill->name
+                  << " upgraded! New damage: " << classicSkill->damage << "\n";
     }
     else
     {
-        std::cout << "Недостаточно монет. Нужно: " << selectedSkill->coinCost
-                  << ", имеется: " << player.playerData->money << "\n";
+        std::cout << "Not enough money. Need: " << selectedSkill->coinCost
+                  << ", have: " << player.playerData->money << "\n";
     }
 }
 
@@ -258,11 +258,11 @@ void PurchaseState::increaseHP()
     {
         player.playerData->money -= 2;
         player.playerData->health += 1;
-        std::cout << "HP увеличен!\n";
+        std::cout << "HP increased!\n";
     }
     else
     {
-        std::cout << "Недостаточно денег для увеличения HP.\n";
+        std::cout << "Not enough money to increase HP.\n";
     }
 }
 
@@ -273,7 +273,7 @@ void PurchaseState::increaseMaxHP()
 
     if (player.playerData->money < cost)
     {
-        std::cout << "Недостаточно монет для увеличения максимального здоровья (требуется " << cost << ").\n";
+        std::cout << "Not enough money to increase maximum health (requires " << cost << ").\n";
         return;
     }
 
@@ -282,7 +282,7 @@ void PurchaseState::increaseMaxHP()
     int increase = 1;
     player.playerData->maxHP += increase;
 
-    std::cout << "Максимальное здоровье увеличено на " << increase << ". Текущее здоровье: "
+    std::cout << "Maximum health increased by " << increase << ". Current health: "
               << player.health << "/" << player.playerData->maxHP << "\n";
 }
 
@@ -293,11 +293,11 @@ void PurchaseState::buySkill()
 
     if (skillPurchased)
     {
-        std::cout << "Вы уже приобрели навык в этот визит. Переходите к бою или выполните другое действие.\n";
+        std::cout << "You already purchased a skill in this visit. Go to battle or perform another action.\n";
         return;
     }
 
-    std::cout << "Доступные разблокированные навыки:\n";
+    std::cout << "Available unlocked skills:\n";
 
     std::vector<std::string> allAvailableSkills;
 
@@ -313,7 +313,7 @@ void PurchaseState::buySkill()
 
     if (allAvailableSkills.empty())
     {
-        std::cout << "Нет доступных навыков для покупки.\n";
+        std::cout << "No available skills to buy.\n";
         return;
     }
 
@@ -338,7 +338,7 @@ void PurchaseState::buySkill()
 
         std::shared_ptr<Skill> skill = SkillFactory::create(skillName);
 
-        std::cout << (i + 1) << ". " << skillName << " - " << skill->coinCost << " монет\n";
+        std::cout << (i + 1) << ". " << skillName << " - " << skill->coinCost << " coins\n";
 
         displayedSkills.push_back(skillName);
         displayedPrices.push_back(skill->coinCost);
@@ -348,11 +348,11 @@ void PurchaseState::buySkill()
 
     if (displayedSkills.empty())
     {
-        std::cout << "Нет доступных навыков для покупки.\n";
+        std::cout << "No available skills to buy.\n";
         return;
     }
 
-    std::cout << "Введите номер навыка для покупки (можно купить только один навык за раз): ";
+    std::cout << "Enter the skill number to buy (you can buy only one skill at a time): ";
     std::string input;
     std::getline(std::cin, input);
 
@@ -368,14 +368,14 @@ void PurchaseState::buySkill()
 
     if (!isValidNumber || input.empty())
     {
-        std::cout << "Ошибка: введите корректный номер навыка!\n";
+        std::cout << "Error: enter a valid skill number!\n";
         return;
     }
 
     size_t choice = std::stoul(input);
     if (choice < 1 || choice > displayedSkills.size())
     {
-        std::cout << "Ошибка: введите корректный номер навыка!\n";
+        std::cout << "Error: enter a valid skill number!\n";
         return;
     }
 
@@ -386,12 +386,12 @@ void PurchaseState::buySkill()
     {
         player.playerData->money -= skillCost;
         player.skills.push_back(SkillFactory::create(selectedSkillName));
-        std::cout << "Навык '" << selectedSkillName << "' успешно куплен!\n";
+        std::cout << "Skill '" << selectedSkillName << "' successfully purchased!\n";
             skillPurchased = true;
     }
     else
     {
-        std::cout << "Недостаточно монет для покупки навыка (требуется "
-                  << skillCost << ", у вас " << player.playerData->money << ").\n";
+        std::cout << "Not enough money to buy skill (requires "
+                  << skillCost << ", you have " << player.playerData->money << ").\n";
     }
 }

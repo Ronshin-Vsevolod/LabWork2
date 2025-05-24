@@ -15,28 +15,28 @@ game core development: character and ability hierarchy based on class inheritanc
 const std::vector<CommandInfo> BattleState::availableCommands =
 {
     {
-        "attack", "Атаковать противника", 1
+        "attack", "Attack the enemy", 1
     },
     {
-        "move_left", "Движение влево", 2
+        "move_left", "Movement to the left", 2
     },
     {
-        "move_right", "Движение вправо", 3
+        "move_right", "Movement to the right", 3
     },
     {
-        "prepare_skill", "Подготовить навык", 4
+        "prepare_skill", "Prepare a skill", 4
     },
     {
-        "swap_with_enemy", "Поменяться местами с противником", 5
+        "swap_with_enemy", "Swap places with the enemy", 5
     },
     {
-        "turn_around", "Повернуться", 6
+        "turn_around", "Turn around", 6
     },
     {
-        "back", "Вернуться в главное меню", 7
+        "back", "Back to main menu", 7
     },
     {
-        "end_turn", "Завершить ход", 8
+        "end_turn", "Complete the move", 8
     }
 };
 
@@ -50,9 +50,9 @@ BattleState::BattleState(GameManager* gameManager)
 
 void BattleState::enter()
 {
-    std::cout << "Вход в этап битвы.\n";
-    std::cout << "Текущий уровень: " << levelManager->getLevelData()->levelNumber << "\n";
-    std::cout << "Позиция игрока: " << gameManager->getPlayer().location << "\n";
+    std::cout << "Entering the battle phase.\n";
+    std::cout << "Current level: " << levelManager->getLevelData()->levelNumber << "\n";
+    std::cout << "Player position: " << gameManager->getPlayer().location << "\n";
 
     levelManager->placePlayer(&gameManager->getPlayer());
     levelManager->trySpawnEnemies(currentTurn, gameManager->getPlayer());
@@ -71,14 +71,14 @@ void BattleState::enter()
 
                 if (gameManager->getPlayer().health <= 0)
                 {
-                    std::cout << "Вы проиграли!\n";
+                    std::cout << "You lost!\n";
                     gameManager->changeState(new MainMenuState(gameManager));
                     shouldExit = true;
                     continue;
                 }
             }
 
-            std::cout << "Ход игрока.\n";
+            std::cout << "Player turn.\n";
             printAvailableCommands();
             std::getline(std::cin, inputData);
             shouldExit = handleInput(inputData);
@@ -96,7 +96,7 @@ void BattleState::enter()
         else
         {
             levelManager->trySpawnEnemies(currentTurn, gameManager->getPlayer());
-            std::cout << "Ход противников.\n";
+            std::cout << "Enemy turn.\n";
             handleEnemyTurns();
             isPlayerTurn = true;
 
@@ -106,7 +106,7 @@ void BattleState::enter()
 
             if (player.health <= 0)
             {
-                std::cout << "Вы проиграли!\n";
+                std::cout << "You lost!\n";
                 gameManager->changeState(new MainMenuState(gameManager));
                 shouldExit = true;
             }
@@ -116,9 +116,9 @@ void BattleState::enter()
 
                 if (levelManager->areAllEnemiesDefeated())
                 {
-                    std::cout << "Все противники повержены! Уровень пройден!\n";
+                    std::cout << "All enemies defeated! Level passed!\n";
                     player.playerData->skulls += levelManager->getLevelData()->rewardSkulls;
-                    std::cout << "Получено черепов: " << levelManager->getLevelData()->rewardSkulls << "\n";
+                    std::cout << "Received skulls: " << levelManager->getLevelData()->rewardSkulls << "\n";
 
 
                     player.playerData->health = player.health;
@@ -135,7 +135,7 @@ void BattleState::enter()
 
 void BattleState::exit()
 {
-    std::cout << "Выход из этапа битвы.\n";
+    std::cout << "Exiting the battle phase.\n";
 }
 
 bool BattleState::handleInput(const std::string& inputData)
@@ -156,7 +156,7 @@ bool BattleState::handleInput(const std::string& inputData)
             if (!player.prepareStack.empty())
             {
                 Skill* skill = player.prepareStack[0].get();
-                std::cout << "Использование навыка: " << skill->name << "\n";
+                std::cout << "Using skill: " << skill->name << "\n";
 
                 player.useSkills(levelManager->getLevelData()->fieldSize, targets);
                 levelManager->removeDeadEnemies(gameManager->getPlayer());
@@ -167,7 +167,7 @@ bool BattleState::handleInput(const std::string& inputData)
             }
             else
             {
-                std::cout << "У вас нет подготовленных навыков для атаки! Сначала подготовьте навык.\n";
+                std::cout << "You have no prepared skills for attack! Prepare a skill first.\n";
                 return false;
             }
         }
@@ -179,7 +179,7 @@ bool BattleState::handleInput(const std::string& inputData)
 
             if (position > 0 && !occupied[position - 1])
             {
-                std::cout << "Движение влево.\n";
+                std::cout << "Movement to the left.\n";
                 player.moveLeft(levelManager->getLevelData()->fieldSize, occupied);
                 levelManager->updateOccupiedCells(player);
 
@@ -189,7 +189,7 @@ bool BattleState::handleInput(const std::string& inputData)
             }
             else
             {
-                std::cout << "Движение невозможно!\n";
+                std::cout << "Movement is not possible!\n";
                 return false;
             }
         }
@@ -202,7 +202,7 @@ bool BattleState::handleInput(const std::string& inputData)
 
             if (position < fieldSize - 1 && !occupied[position + 1])
             {
-                std::cout << "Движение вправо.\n";
+                std::cout << "Movement to the right.\n";
                 player.moveRight(fieldSize, occupied);
                 levelManager->updateOccupiedCells(player);
 
@@ -212,7 +212,7 @@ bool BattleState::handleInput(const std::string& inputData)
             }
             else
             {
-                std::cout << "Движение невозможно!\n";
+                std::cout << "Movement is not possible!\n";
                 return false;
             }
         }
@@ -223,11 +223,11 @@ bool BattleState::handleInput(const std::string& inputData)
 
             if (skills.empty())
             {
-                std::cout << "У вас нет доступных навыков!\n";
+                std::cout << "You have no available skills!\n";
                 return false;
             }
 
-            std::cout << "Доступные навыки:\n";
+            std::cout << "Available skills:\n";
             for (size_t i = 0; i < skills.size(); ++i)
             {
                 ClassicSkill* classicSkill = dynamic_cast<ClassicSkill*>(skills[i].get());
@@ -236,14 +236,14 @@ bool BattleState::handleInput(const std::string& inputData)
 
                 if (classicSkill)
                 {
-                    std::cout << " (урон: " << classicSkill->damage << ")";
+                    std::cout << " (damage: " << classicSkill->damage << ")";
                 }
 
-                std::cout << " (кулдаун: " << skills[i]->cooldownTimer << "/" << skills[i]->cooldown << ")";
+                std::cout << " (cooldown: " << skills[i]->cooldownTimer << "/" << skills[i]->cooldown << ")";
                 std::cout << std::endl;
             }
 
-            std::cout << "Введите индекс навыка: ";
+            std::cout << "Enter the skill index: ";
             std::string indexStr;
             std::getline(std::cin, indexStr);
 
@@ -261,7 +261,7 @@ bool BattleState::handleInput(const std::string& inputData)
 
             if (!isValidNumber)
             {
-                std::cout << "Ошибка: требуется числовой индекс!\n";
+                std::cout << "Error: a numerical index is required!\n";
                 return false;
             }
 
@@ -272,8 +272,8 @@ bool BattleState::handleInput(const std::string& inputData)
 
                 if (skills[index]->cooldownTimer > 0)
                 {
-                    std::cout << "Навык '" << skills[index]->name << "' на перезарядке (осталось: "
-                              << skills[index]->cooldownTimer << " ходов)!\n";
+                    std::cout << "Skill '" << skills[index]->name << "' is on cooldown (remaining: "
+                              << skills[index]->cooldownTimer << " turns)!\n";
                     return false;
                 }
 
@@ -289,12 +289,12 @@ bool BattleState::handleInput(const std::string& inputData)
 
                 if (alreadyPrepared)
                 {
-                    std::cout << "Навык '" << skills[index]->name << "' уже подготовлен!\n";
+                    std::cout << "Skill '" << skills[index]->name << "' is already prepared!\n";
                     return false;
                 }
 
                 player.prepareSkill(index);
-                std::cout << "Навык '" << skills[index]->name << "' подготовлен.\n";
+                std::cout << "Skill '" << skills[index]->name << "' prepared.\n";
 
                 player.updateCooldowns();
                 isPlayerTurn = false;
@@ -302,7 +302,7 @@ bool BattleState::handleInput(const std::string& inputData)
             }
             else
             {
-                std::cout << "Неверный индекс навыка!\n";
+                std::cout << "Invalid skill index!\n";
                 return false;
             }
         }
@@ -312,7 +312,7 @@ bool BattleState::handleInput(const std::string& inputData)
             std::vector<std::shared_ptr<Enemy>>& enemies = levelManager->getEnemies();
             player.swapWithEnemy(enemies);
 
-            std::cout << "Поменялись местами с противником.\n";
+            std::cout << "Swapped places with the enemy.\n";
             levelManager->updateOccupiedCells(player);
 
             player.updateCooldowns();
@@ -323,7 +323,7 @@ bool BattleState::handleInput(const std::string& inputData)
         case PlayerCommand::TURN_AROUND:
         {
             player.turnAround();
-            std::cout << "Направление изменено.\n";
+            std::cout << "Direction changed.\n";
 
 
             player.updateCooldowns();
@@ -333,7 +333,7 @@ bool BattleState::handleInput(const std::string& inputData)
 
         case PlayerCommand::BACK:
         {
-            std::cout << "Возврат в главное меню.\n";
+            std::cout << "Return to main menu.\n";
 
             gameManager->changeState(new MainMenuState(gameManager, true));
             return true;
@@ -341,7 +341,7 @@ bool BattleState::handleInput(const std::string& inputData)
 
         case PlayerCommand::END_TURN:
         {
-            std::cout << "Ход завершен.\n";
+            std::cout << "Move completed.\n";
 
 
             player.updateCooldowns();
@@ -352,7 +352,7 @@ bool BattleState::handleInput(const std::string& inputData)
         case PlayerCommand::UNKNOWN:
         default:
         {
-            std::cout << "Неизвестная команда.\n";
+            std::cout << "Unknown command.\n";
             return false;
         }
     }
@@ -365,18 +365,18 @@ void BattleState::handleEnemyTurns()
 
     if (!enemies.empty())
     {
-        std::cout << "Ход противников.\n";
+        std::cout << "Enemy turn.\n";
     }
     else
     {
-        std::cout << "Нет активных противников.\n";
+        std::cout << "No active enemies.\n";
     }
 
     for (std::shared_ptr<Enemy>& enemy : enemies)
     {
         if (enemy)
         {
-            std::cout << enemy->name << " (здоровье: " << enemy->health << ", позиция: " << enemy->location << ") совершает ход...\n";
+            std::cout << enemy->name << " (health: " << enemy->health << ", position: " << enemy->location << ") makes a move...\n";
             enemy->makeTurn(gameManager->getPlayer(), *levelManager);
             if (gameManager->getPlayer().health <= 0)
             {
@@ -400,12 +400,12 @@ void BattleState::handleEnemyTurns()
 
 void BattleState::printAvailableCommands() const
 {
-    std::cout << "\nДоступные команды:\n";
+    std::cout << "\nAvailable commands:\n";
     for (const CommandInfo& cmd : availableCommands)
     {
         std::cout << cmd.number << ". " << cmd.name << " - " << cmd.description << "\n";
     }
-    std::cout << "\nВведите номер команды или её название: ";
+    std::cout << "\nEnter the command number or its name: ";
 }
 
 PlayerCommand BattleState::parseCommand(const std::string& input)

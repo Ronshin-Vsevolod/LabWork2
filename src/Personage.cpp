@@ -17,8 +17,8 @@ void Personage::prepareSkill(size_t skillIndex)
     {
         if (skills[skillIndex]->cooldownTimer > 0)
         {
-            std::cout << "Навык " << skills[skillIndex]->name
-                     << " на перезарядке (осталось: " << skills[skillIndex]->cooldownTimer << " ходов)!\n";
+            std::cout << "Skill " << skills[skillIndex]->name
+                     << " on cooldown (remaining: " << skills[skillIndex]->cooldownTimer << " turns)!\n";
             return;
         }
 
@@ -26,18 +26,18 @@ void Personage::prepareSkill(size_t skillIndex)
         {
             if (skill == skills[skillIndex])
             {
-                std::cout << "Навык " << skills[skillIndex]->name << " уже подготовлен!\n";
+                std::cout << "Skill " << skills[skillIndex]->name << " already prepared!\n";
                 return;
             }
         }
 
         skills[skillIndex]->preparing = true;
         prepareStack.push_back(skills[skillIndex]);
-        std::cout << name << " подготовил навык: " << skills[skillIndex]->name << "\n";
+        std::cout << name << " prepared skill: " << skills[skillIndex]->name << "\n";
     }
     else
     {
-        std::cout << name << " не удалось подготовить навык.\n";
+        std::cout << name << " failed to prepare skill.\n";
     }
 }
 
@@ -47,7 +47,7 @@ void Personage::useSkills(int fieldSize, std::vector<Personage*>& enemies)
     {
         if (skill->cooldownTimer > 0)
         {
-            std::cout << "Навык " << skill->name << " на перезарядке!\n";
+            std::cout << "Skill " << skill->name << " on cooldown!\n";
             continue;
         }
 
@@ -64,11 +64,11 @@ void Personage::moveRight(int fieldSize, const std::vector<bool>& occupiedCells)
     if (newLocation < fieldSize && !occupiedCells[newLocation])
     {
         location = newLocation;
-        std::cout << name << " перемещён вправо. Новая позиция: " << location << "\n";
+        std::cout << name << " moved right. New position: " << location << "\n";
     }
     else
     {
-        std::cout << name << " не может переместиться вправо.\n";
+        std::cout << name << " can't move right.\n";
     }
 }
 
@@ -78,18 +78,18 @@ void Personage::moveLeft(int fieldSize, const std::vector<bool>& occupiedCells)
     if (newLocation >= 0 && !occupiedCells[newLocation])
     {
         location = newLocation;
-        std::cout << name << " перемещён влево. Новая позиция: " << location << "\n";
+        std::cout << name << " moved to the left. New position: " << location << "\n";
     }
     else
     {
-        std::cout << name << " не может переместиться влево.\n";
+        std::cout << name << " can't move left.\n";
     }
 }
 
 void Personage::turnAround()
 {
     direction = !direction;
-    std::cout << name << " повёрнут в " << (direction ? "право" : "лево") << ".\n";
+    std::cout << name << " turned " << (direction ? "right" : "left") << ".\n";
 }
 
 bool Personage::isLocationOccupied(int location, const std::vector<Personage*>& enemies)
@@ -114,7 +114,7 @@ void Personage::checkAllCharacters(std::vector<Personage*>& enemies)
 
     if (health <= 0)
     {
-        std::cout << name << " погиб!\n";
+        std::cout << name << " died!\n";
     }
 }
 
@@ -130,7 +130,7 @@ void Personage::addEffect(std::shared_ptr<Effect> effect)
 {
     if (!effect)
     {
-        std::cerr << "Попытка добавить nullptr эффект!" << std::endl;
+        std::cerr << "Attempt to add nullptr effect!" << std::endl;
         return;
     }
 
@@ -196,7 +196,7 @@ void Personage::takeDamage(int damage)
     triggerEffect(4);
 
     health -= damage;
-    std::cout << name << " получает " << damage << " урона! Оставшееся здоровье: " << health << "\n";
+    std::cout << name << " takes " << damage << " damage! Remaining health: " << health << "\n";
 }
 
 void Personage::dealDamage(Personage* target, int damage)

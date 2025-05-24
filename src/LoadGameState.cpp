@@ -15,26 +15,26 @@ LoadGameState::LoadGameState(GameManager* gameManager)
 
 void LoadGameState::enter()
 {
-    std::cout << "Загрузка сохранения...\n";
+    std::cout << "Loading save...\n";
     gameManager->loadGame();
 
     Player& player = gameManager->getPlayer();
     PlayerData* playerData = gameManager->getPlayerData();
 
-    std::cout << "Баланс монет: " << player.playerData->money << "\n";
-    std::cout << "Черепы: " << player.playerData->skulls << "\n";
-    std::cout << "Здоровье: " << player.health << "/" << player.playerData->maxHP << "\n";
+    std::cout << "Money balance: " << player.playerData->money << "\n";
+    std::cout << "Skulls: " << player.playerData->skulls << "\n";
+    std::cout << "Health: " << player.health << "/" << player.playerData->maxHP << "\n";
 
     switch (playerData->currentGameState)
     {
         case GameStateType::BATTLE:
-            std::cout << "Переход к боевому этапу...\n";
+            std::cout << "Transition to battle stage...\n";
             gameManager->changeState(new BattleState(gameManager));
             break;
 
         case GameStateType::PURCHASE:
         default:
-            std::cout << "Переход к этапу покупок...\n";
+            std::cout << "Transition to purchase stage...\n";
             gameManager->changeState(new PurchaseState(gameManager));
             break;
     }
@@ -42,7 +42,7 @@ void LoadGameState::enter()
 
 void LoadGameState::exit()
 {
-    std::cout << "Выход из состояния загрузки.\n";
+    std::cout << "Exit from load state.\n";
 }
 
 bool LoadGameState::handleInput(const std::string& inputData)

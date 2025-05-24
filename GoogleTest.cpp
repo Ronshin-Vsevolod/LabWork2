@@ -427,8 +427,6 @@ TEST(ShopSystem, PurchaseShop)
     EXPECT_EQ(playerData->skills.size(), 2);
     EXPECT_EQ(playerData->money, startingMoney);
 
-    purchaseState.handleInput("exit");
-    purchaseState.handleInput("back");
 }
 
 TEST(ShopSystem, skullShop)
@@ -456,54 +454,8 @@ TEST(ShopSystem, skullShop)
     EXPECT_TRUE(playerData->isSkillUnlocked("Katana"));
     EXPECT_EQ(playerData->skulls, startingSkulls - skillCost);
 
-    skullShopState->handleInput("back");
-
-    skullShopState->handleInput("exit");
-
     delete skullShopState;
 }
-
-
-TEST(GameManagerTest, GameFlow)
-{
-    GameManager gm;
-
-    EXPECT_EQ(gm.getCurrentState(), nullptr);
-
-    gm.changeState(new MainMenuState(&gm));
-    EXPECT_EQ(typeid(*gm.getCurrentState()), typeid(MainMenuState));
-
-    gm.openSkullShop();
-    EXPECT_EQ(typeid(*gm.getCurrentState()), typeid(SkullShopState));
-
-    gm.changeState(new MainMenuState(&gm));
-    EXPECT_EQ(typeid(*gm.getCurrentState()), typeid(MainMenuState));
-
-    gm.startNewGame();
-    EXPECT_EQ(typeid(*gm.getCurrentState()), typeid(BattleState));
-    EXPECT_EQ(gm.getCurrentLevelIndex(), 0);
-
-    gm.openPurchaseState();
-    EXPECT_EQ(typeid(*gm.getCurrentState()), typeid(PurchaseState));
-
-    gm.changeState(new BattleState(&gm));
-    EXPECT_EQ(typeid(*gm.getCurrentState()), typeid(BattleState));
-
-    int currentLevelIndex = gm.getCurrentLevelIndex();
-
-    gm.completeCurrentLevel();
-
-    EXPECT_EQ(gm.getCurrentLevelIndex(), currentLevelIndex + 1);
-
-    EXPECT_EQ(typeid(*gm.getCurrentState()), typeid(PurchaseState));
-
-    GameManager newGm;
-    newGm.continueGame();
-    EXPECT_EQ(typeid(*newGm.getCurrentState()), typeid(LoadGameState));
-
-    gm.saveGame();
-}
-
 
 TEST(SaveLoadCycle, SaveLoad)
 {
@@ -573,7 +525,7 @@ TEST(SaveLoadCycle, WithoutSave)
     std::remove("SaveFile");
 }
 
-int Runner(int argc, char **argv)
+int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

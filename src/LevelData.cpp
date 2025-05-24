@@ -10,15 +10,15 @@ std::vector<LevelData> Levels =
     (
         1, 5, 1, 5,
         {
-            WaveInfo("Первая волна", 0,
+            WaveInfo("First wave", 0,
             {
                 "Ashigaru", "Ashigaru", "Twin Tachi"
             }),
-            WaveInfo("Вторая волна", 5,
+            WaveInfo("Second wave", 5,
             {
                 "Ashigaru", "Twin Tachi", "Yari Master"
             }),
-            WaveInfo("Третья волна", 10,
+            WaveInfo("Third wave", 10,
             {
                 "Ashigaru", "Twin Tachi", "Yari Master", "Tetsudo Bandit"
             })
@@ -28,15 +28,15 @@ std::vector<LevelData> Levels =
     (
         2, 7, 2, 5,
         {
-            WaveInfo("Первая волна", 0,
+            WaveInfo("First wave", 0,
             {
                 "Twin Tachi", "Yari Master", "Tetsudo Bandit"
             }),
-            WaveInfo("Вторая волна", 6,
+            WaveInfo("Second wave", 6,
             {
                 "Yari Master", "Tetsudo Bandit", "Armored Giant"
             }),
-            WaveInfo("Третья волна", 12,
+            WaveInfo("Third wave", 12,
             {
                 "Twin Tachi", "Yari Master", "Tetsudo Bandit", "Armored Giant"
             })
@@ -46,13 +46,13 @@ std::vector<LevelData> Levels =
     (
         3, 8, 3, 7,
         {
-            WaveInfo("Первая волна", 0,
+            WaveInfo("First wave", 0,
             {
                 "Yari Master", "Tetsudo Bandit", "Armored Giant", "Ashigaru"}),
-            WaveInfo("Вторая волна", 7,
+            WaveInfo("Second wave", 7,
             {
                 "Tetsudo Bandit", "Armored Giant", "Twin Tachi", "Yari Master"}),
-            WaveInfo("Третья волна", 14,
+            WaveInfo("Third wave", 14,
             {
                 "Armored Giant", "Twin Tachi", "Yari Master", "Tetsudo Bandit", "Ashigaru"})
             }
@@ -61,13 +61,13 @@ std::vector<LevelData> Levels =
     (
         4, 9, 4, 7,
         {
-            WaveInfo("Первая волна", 0,
+            WaveInfo("First wave", 0,
             {
                 "Armored Giant", "Twin Tachi", "Yari Master", "Tetsudo Bandit", "Ashigaru"}),
-            WaveInfo("Вторая волна", 8,
+            WaveInfo("Second wave", 8,
             {
                 "Twin Tachi", "Yari Master", "Tetsudo Bandit", "Armored Giant", "Ashigaru"}),
-            WaveInfo("Третья волна", 16,
+            WaveInfo("Third wave", 16,
             {
                 "Yari Master", "Tetsudo Bandit", "Armored Giant", "Twin Tachi", "Ashigaru", "Twin Tachi"})
             }
@@ -76,19 +76,19 @@ std::vector<LevelData> Levels =
     (
         5, 10, 5, 9,
         {
-            WaveInfo("Первая волна", 0,
+            WaveInfo("First wave", 0,
             {
                 "Tetsudo Bandit", "Armored Giant", "Twin Tachi", "Yari Master", "Ashigaru", "Twin Tachi"}),
-            WaveInfo("Вторая волна", 9,
+            WaveInfo("Second wave", 9,
             {
                 "Armored Giant", "Twin Tachi", "Yari Master", "Tetsudo Bandit", "Ashigaru", "Twin Tachi"}),
-            WaveInfo("Третья волна", 18,
+            WaveInfo("Third wave", 18,
             {
                 "Twin Tachi", "Yari Master", "Tetsudo Bandit", "Armored Giant", "Ashigaru", "Twin Tachi", "Yari Master"}),
-            WaveInfo("Четвертая волна", 27,
+            WaveInfo("Fourth wave", 27,
             {
                 "Yari Master", "Tetsudo Bandit", "Armored Giant", "Twin Tachi", "Ashigaru", "Twin Tachi", "Yari Master", "Tetsudo Bandit"}),
-            WaveInfo("Пятая волна", 36,
+            WaveInfo("Fifth wave", 36,
             {
                 "Tetsudo Bandit", "Armored Giant", "Twin Tachi", "Yari Master", "Ashigaru", "Twin Tachi", "Yari Master", "Tetsudo Bandit", "Armored Giant"})
             }

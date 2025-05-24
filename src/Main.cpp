@@ -14,6 +14,6 @@ int main(int argc, char **argv)
     MainMenuState mainMenuState(&gameManager, hasSave);
     mainMenuState.enter();
 
-    std::cout << "Игра завершена. До свидания!\n";
+    std::cout << "Game finished. Goodbye!\n";
     return 0;
 }

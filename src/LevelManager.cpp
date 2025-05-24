@@ -39,7 +39,7 @@ void LevelManager::placePlayer(Player* newPlayer)
     {
         newPlayer->location = currentLevel->fieldSize / 2;
         updateOccupiedCells(*newPlayer);
-        std::cout << "Игрок размещён в позиции " << newPlayer->location << "\n";
+        std::cout << "Player placed in position " << newPlayer->location << "\n";
     }
 }
 
@@ -101,7 +101,7 @@ void LevelManager::trySpawnEnemies(int currentTurn, const Player& player)
     if(shouldSpawn)
     {
         spawning = true;
-        std::cout<<"Новая волна на подходе \n";
+        std::cout<<"New wave is coming \n";
     }
 }
 
@@ -109,7 +109,7 @@ void LevelManager::spawnWaveEnemies(int currentTurn, const Player& player)
 {
     if (!currentLevel)
     {
-        std::cerr << "Ошибка спавна: currentLevel равен nullptr\n";
+        std::cerr << "Spawn error: currentLevel is nullptr\n";
         return;
     }
 
@@ -120,8 +120,8 @@ void LevelManager::spawnWaveEnemies(int currentTurn, const Player& player)
     }
 
     const WaveInfo& wave = currentLevel->waves[currentWaveIndex];
-    std::cout << "\n[Волна " << currentWaveIndex + 1 << "] "
-              << wave.name << " началась\n";
+    std::cout << "\n[Wave " << currentWaveIndex + 1 << "] "
+              << wave.name << " started\n";
 
     EnemyFactory factory;
     std::vector<int> freePositions = getFreePositions();
@@ -135,13 +135,13 @@ void LevelManager::spawnWaveEnemies(int currentTurn, const Player& player)
     {
         if (enemies.size() >= static_cast<size_t>(maxEnemies))
         {
-            std::cout << "Лимит противников (" << maxEnemies << ") достигнут\n";
+            std::cout << "Enemy limit (" << maxEnemies << ") reached\n";
             break;
         }
 
         if (freePositions.empty())
         {
-            std::cerr << "Нет свободных позиций для " << *it << "\n";
+            std::cerr << "No free positions for " << *it << "\n";
             continue;
         }
 
@@ -156,16 +156,16 @@ void LevelManager::spawnWaveEnemies(int currentTurn, const Player& player)
         if (!enemy)
         {
             occupiedCells[spawnPos] = false;
-            std::cerr << "Ошибка создания " << *it << "\n";
+            std::cerr << "Creation error " << *it << "\n";
             continue;
         }
 
         enemy->location = spawnPos;
         enemy->direction = (player.location > spawnPos);
 
-        std::cout << "-> " << enemy->name << " создан на позиции "
-                 << enemy->location << ", направление: "
-                 << (enemy->direction ? "вправо" : "влево") << "\n";
+        std::cout << "-> " << enemy->name << " created on position "
+                 << enemy->location << ", direction: "
+                 << (enemy->direction ? "right" : "left") << "\n";
 
         enemies.push_back(enemy);
         spawnedCount++;
@@ -174,8 +174,8 @@ void LevelManager::spawnWaveEnemies(int currentTurn, const Player& player)
     }
 
     currentWaveIndex++;
-    std::cout << "Успешно создано: " << spawnedCount << "/" << wave.enemies.size() << "\n";
-    std::cout << "Всего противников: " << enemies.size() << "\n\n";
+    std::cout << "Successfully created: " << spawnedCount << "/" << wave.enemies.size() << "\n";
+    std::cout << "Total enemies: " << enemies.size() << "\n\n";
 }
 
 bool LevelManager::areAllEnemiesDefeated() const

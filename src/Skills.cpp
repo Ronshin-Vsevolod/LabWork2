@@ -103,7 +103,7 @@ std::unordered_map<std::string, SkillFactory::Creator> SkillFactory::registry =
 
 
 HealingTotemSkill::HealingTotemSkill()
-    : EffectSkill("Целебный тотем", 3, {0, 1, -1}, 2, 0) 
+    : EffectSkill("Healing totem", 3, {0, 1, -1}, 2, 0) 
     {
     auto healingEffect = std::make_shared<HealingEffect>(
         1, 1,
@@ -117,11 +117,11 @@ void HealingTotemSkill::useSkill(Personage* user, const std::vector<Personage*>&
 {
     if (cooldownTimer > 0)
     {
-        std::cout << "Навык " << name << " на перезарядке!\n";
+        std::cout << "Skill " << name << " on cooldown!\n";
         return;
     }
 
-    std::cout << user->name << " использует " << name << "!\n";
+    std::cout << user->name << " uses " << name << "!\n";
 
     auto healingEffect = std::make_shared<HealingEffect>(
         1, 1,
@@ -136,7 +136,7 @@ void HealingTotemSkill::useSkill(Personage* user, const std::vector<Personage*>&
     {
         if (target)
         {
-            std::cout << "Эффект исцеления применен к " << target->name << "!\n";
+            std::cout << "Healing effect applied to " << target->name << "!\n";
             target->addEffect(healingEffect);
         }
     }
@@ -145,7 +145,7 @@ void HealingTotemSkill::useSkill(Personage* user, const std::vector<Personage*>&
 }
 
 CurseSkill::CurseSkill()
-    : EffectSkill("Проклятие", 4, {1, 2}, 3, 1) 
+    : EffectSkill("Curse", 4, {1, 2}, 3, 1) 
     {
     auto damageReductionEffect = std::make_shared<DamageBoostEffect>(
         -1, 3,
@@ -156,7 +156,7 @@ CurseSkill::CurseSkill()
     }
 
 AncestralSpiritSkill::AncestralSpiritSkill()
-    : EffectSkill("Дух предков", 5, {0, 1}, 4, 2) 
+    : EffectSkill("Ancestral spirit", 5, {0, 1}, 4, 2) 
     {
     auto damageBoostEffect = std::make_shared<DamageBoostEffect>(
         2, 3,
