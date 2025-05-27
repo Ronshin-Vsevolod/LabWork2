@@ -25,4 +25,4 @@ jobs:
         run: make
 
       - name: Run tests
-        run: ./test-game
+        run: ./test-game < test_input.txt
