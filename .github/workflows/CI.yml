@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - main
-      - last_branch
   pull_request:
     branches:
       - main
+      - architectural_description
 
 jobs:
   build:
