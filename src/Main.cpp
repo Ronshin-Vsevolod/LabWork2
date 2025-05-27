@@ -2,7 +2,7 @@
 game core development: character and ability hierarchy based on class inheritance; simple AI; graphical interface
 */
 
-#ifndef MAIN_H
-#define MAIN_H
-
-#endif
+int Main(int argc, char **argv)
+{
+    return 0;
+}
