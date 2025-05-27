@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - trial
   pull_request:
     branches:
       - main
+      - trial
 
 jobs:
   build:
@@ -27,4 +29,4 @@ jobs:
           make test
 
       - name: Run tests
-        run: timeout 60 ./test-game < test_input.txt || echo "Tests completed or timed out"
+        run: ./test-game < test_input.txt
