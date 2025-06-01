@@ -30,7 +30,7 @@ make test
 
 ### Test suite
 
-./test-game
+./test-game < test_input.txt
 
 ## Clean
 

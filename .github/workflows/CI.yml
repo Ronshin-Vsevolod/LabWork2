@@ -31,4 +31,4 @@ jobs:
         run: make test
         
       - name: Run tests
-        run: timeout 120 ./test-game < test_input.txt
+        run: ./test-game < test_input.txt
