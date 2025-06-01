@@ -5,4 +5,8 @@ game core development: character and ability hierarchy based on class inheritanc
 #ifndef MAIN_H
 #define MAIN_H
 
+#include <iostream>
+#include <fstream>
+
+int main(int argc, char **argv);
 #endif

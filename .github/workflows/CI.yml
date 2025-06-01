@@ -4,11 +4,10 @@ on:
   push:
     branches:
       - main
-      - trial
+      - last_branch
   pull_request:
     branches:
       - main
-      - trial
 
 jobs:
   build:

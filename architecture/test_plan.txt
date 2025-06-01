@@ -1,0 +1,74 @@
+TEST PLAN
+
+1. combat system testing (CombatSystemTest)
+   1.1. impactOfSkills - testing the impact of skills on characters
+       - Correct operation of skill preparation (prepareSkill)
+       - Limit on the number of prepared skills
+       - Correct application of damage
+       - Healing skills work
+
+   1.2 Effects - testing the effects system
+       - Adding effects to a character
+       - Triggering effects at the right moments (TriggerType)
+       - Decreasing the duration of effects
+       - Automatic removal of expired effects
+
+2. testing of enemy AI (EnemyAITest)
+   2.1 BasicBehavior - basic behavior of enemies
+       - Moving towards the player
+       - Obstacle avoidance
+       - Path blocking behavior
+
+   2.2 MilitaryBehavior - combat behavior of enemies
+       - Selecting skills depending on distance
+       - Correct use of ranged skills
+       - Correct use of melee skills
+       - Testing player damage
+
+3. level system testing (LevelSystemTest)
+   3.1 LevelSystem - basic level mechanics
+       - Keeping track of occupied cells
+       - Correct character placement
+       - Spavn enemies
+       - Removing dead enemies
+       - Level rewards
+
+   3.2 EnemyWaves - Enemy Wave System
+       - Proper spamming of enemy waves
+       - Observing the maximum number of enemies
+       - Correct types of enemies in waves
+       - Spacing of enemies on the map
+
+4. testing the ShopSystem (ShopSystem)
+   4.1 PurchaseShop - Upgrade Shop
+       - Increase in max HP
+       - Skill improvement
+       - Health regeneration
+       - Buying new skills
+       - Check if you can't re-purchase
+
+   4.2. skullShop - skill unlock store
+       - Display available skills
+       - Unlock skills for skulls
+       - Check skull count
+       - Add unlocked skills to the list of available skills
+
+5. Testing the game flow (GameManagerTest)
+   5.1 GameFlow - main game flow
+       - Switching between game states
+       - Opening stores
+       - Starting a new game
+       - Completing levels
+       - Moving to the next level
+
+6. Testing Save/LoadCycle (SaveLoadCycle)
+   6.1 SaveLoad - saving and loading the game
+       - Saving player's status (money, skulls, health)
+       - Saving player's skills
+       - Saving current level
+       - Loading saved data
+
+   6.2. WithoutSave - behavior in case of no save
+       - Initializing the player with initial values
+       - Creating a new save
+       - Loading a newly created save

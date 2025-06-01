@@ -1,10 +1,10 @@
 # LabWork2
 
-##Author
+## Author
 
 Роньшин Всеволод Вадимович, 81 группа
 
-##Contacts
+## Contacts
 
 st132572@student.spbu.ru
 
@@ -12,22 +12,27 @@ st132572@student.spbu.ru
 
 game core development: character and ability hierarchy based on class inheritance; simple AI; graphical interface
 
-##Build
+## Build
 
-###Application
+### Application
 
 make
 
-###Test suite
+### Test suite
 
 make test
 
-##Run
+## Run
 
-###Application
+### Application
 
 ./game
 
-###Test suite
+### Test suite
 
 ./test-game
+
+## Clean
+
+make clean
+make cleanall
