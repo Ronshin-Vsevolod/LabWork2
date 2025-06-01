@@ -115,11 +115,12 @@ public:
     {
         if (cooldownTimer > 0)
         {
-            std::cout << "Навык " << name << " на перезарядке!\n";
+            std::cout << "Skill " << name << " on cooldown!\n";
             return;
         }
 
-        std::cout << user->name << " использует " << name << "!\n";
+        std::cout << user->name << " uses " << name << "!\n";
+
         for (Personage* target : targets)
         {
             for (int zone : range_zones)
@@ -128,10 +129,10 @@ public:
                 if (target->location == targetLocation)
                 {
                     user->dealDamage(target, damage);
-                    std::cout << target->name << " получает " << damage << " урона!\n";
+                    std::cout << target->name << " gets " << damage << " damage!\n";
                     if (target->health <= 0)
                     {
-                        std::cout << target->name << " повержен!\n";
+                        std::cout << target->name << " defeated!\n";
                     }
                 }
             }
@@ -143,7 +144,7 @@ public:
     void upgrade() override
     {
         damage += 1;
-        std::cout << "Навык " << name << " улучшен! Новый урон: " << damage << "\n";
+        std::cout << "Skill " << name << " upgraded! New damage: " << damage << "\n";
     }
 };
 
