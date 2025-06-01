@@ -8,6 +8,7 @@ on:
   pull_request:
     branches:
       - main
+      - architectural_description
 
 jobs:
   build:
@@ -20,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libgtest-dev googletest
+          sudo apt-get install -y build-essential libgtest-dev
 
       - name: Build project
         run: |

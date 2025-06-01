@@ -120,6 +120,7 @@ public:
         }
 
         std::cout << user->name << " uses " << name << "!\n";
+
         for (Personage* target : targets)
         {
             for (int zone : range_zones)

@@ -144,7 +144,7 @@ TEST(EnemyAITest, BasicBehavior)
     auto player = std::make_shared<Player>(nullptr);
     player->location = 4;
 
-    auto enemy = std::make_shared<Enemy>("Враг", 10, 10, 2, true);
+    auto enemy = std::make_shared<Enemy>("Enemy", 10, 10, 2, true);
     enemy->location = 0;
     auto skill = std::make_shared<ClassicSkill>("TestSkill", 1, 1, std::vector<int>{1}, 0, 0);
     enemy->prepareStack.push_back(skill);
